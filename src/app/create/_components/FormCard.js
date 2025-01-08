@@ -1,17 +1,26 @@
+"use client"
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { ArrowLeftCircle } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 function FormCard() {
+    const router = useRouter()
+ const handleBackEvent = () =>{
+    //router.replace("/dashboard")
+    router.back()
+ }
+
   return (
     <div className='w-full flex justify-center'>
       <Card className="w-1/3 px-4 py-4 shadow-2xl">
         <CardTitle>
-            <div className='flex flex-row'><ArrowLeftCircle className='cursor' style={{cursor:'pointer'}} /> <div className='ml-2 '>Create Your Goal</div> </div>
+            <div className='flex flex-row'><ArrowLeftCircle className='cursor' style={{cursor:'pointer'}} onClick={() =>handleBackEvent()}/> <div className='ml-2 '>Create Your Goal</div> </div>
              
         </CardTitle>
         <form>

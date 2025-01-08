@@ -8,12 +8,15 @@ import React from 'react'
 
 const data = [
     {
+        "id":1,
         "title":"List Your Goals",
     },
     {
+        "id":2,
         "title":"Daily Resolution",
     },
     {
+        "id":3,
         "title":"Front End Solution"
     }
 ]
@@ -22,6 +25,10 @@ function ListGoals() {
  const router = useRouter()
  const handleCreateGoal = () =>{
     router.push("/create")
+ }
+
+ const handleListEvent = (id) =>{
+  router.push(`/details/${id}`)
  }
 
   return (
@@ -33,7 +40,7 @@ function ListGoals() {
         </CardTitle>
         <CardContent>
             {data.map((index,element) => (
-               <p>
+               <p onClick={() => handleListEvent(index.id)}>
                 {index.title}
                </p>
             )
