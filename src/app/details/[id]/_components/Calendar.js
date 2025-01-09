@@ -2,11 +2,17 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import styled from 'styled-components';
+import moment from 'moment'
+import { Calendar1Icon } from 'lucide-react';
+// const mark = [
+//   '09-01-2025',
+//   '08-01-2025'
+// ]
 
-function CustomCalendar() {
+function CustomCalendar({mark}) {
   const [date, setDate] = useState(new Date()); // state to handle date selection
   const [selectedDate, setSelectedDate] = useState(null); // state to store the selected date
-  
+  console.log(mark)
   // Handler for tile click (to select a date)
   const handleDateClick = (value) => {
     setSelectedDate(value);  // Set the selected date
@@ -18,21 +24,35 @@ function CustomCalendar() {
     return date > new Date(); // Disable dates that are after today
   };
 
+  const tileClassName = ({date}) =>{
+    const formattedDate = moment(date).format("DD-MM-YYYY");
+    const matchingMark = mark.find(item => item.date === formattedDate)
+
+    if(matchingMark){
+      return 'highlightColor';
+    }
+    else{
+      return '';
+    }
+  }
+
   return (
     <div className='container py-8 px-8 shadow-2xl shadow-orange-600'>
       <Card className="px-8 py-8">
-        <CardHeader>
-          Milestones
+        <CardHeader className="px-4 py-4">
+          <h1 className='text-2xl font-bold px-4 py-4 flex flex-row'>Milestones<Calendar1Icon className='mt-1 ml-2'/>
+          </h1>
         </CardHeader>
         <CardContent>
           <CalendarContainer>
             <Calendar
               onChange={setDate}
               value={date}
-              prevLabel="←"
-              nextLabel="→"
+              prevLabel="Next Month"
+              nextLabel="Previous Month"
               tileDisabled={tileDisabled}  // Disable dates ahead of today
-              onClickDay={handleDateClick}  // Handle tile click
+              onClickDay={handleDateClick} 
+              tileClassName={tileClassName}
             />
           </CalendarContainer>
         </CardContent>
@@ -47,7 +67,7 @@ const CalendarContainer = styled.div`
   /* ~~~ container styles ~~~ */
   .react-calendar {
     border-radius: 10px;
-    background-color: #fff9c4; /* Light yellow background for the calendar */
+    // background-color: #fff9c4; /* Light yellow background for the calendar */
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   }
 
@@ -77,12 +97,11 @@ const CalendarContainer = styled.div`
   }
 
   .react-calendar__navigation__arrow:hover {
-    background-color: #ff5733; /* Darker orange when hovering */
+    background-color: #ff7f50; /* Darker orange when hovering */
   }
 
   /* ~~~ tile styles ~~~ */
   .react-calendar__tile {
-    background-color: antiquewhite;
     font-size: 1.25rem;
     height: 50px;
     width: 50px;
@@ -99,7 +118,7 @@ const CalendarContainer = styled.div`
 
   /* Selected date style */
   .react-calendar__tile--active {
-    background-color: #ff5733; /* Active date with dark orange */
+    background-color: #ff7f50; /* Active date with dark orange */
     color: white;
   }
 
@@ -119,6 +138,18 @@ const CalendarContainer = styled.div`
   .react-calendar__tile--now {
     border: 2px solid #ff7f50; /* Border around today's date */
     font-weight: bold;
+  }
+
+  .highlightColor{
+    background-color:#A0CED9
+  }
+  
+  .react-calendar__month-view__weekdays__weekday{
+    display:flex;
+    justify-content:center;
+    background-color:white;
+    text-decoration:none;
+    
   }
 `;
 
