@@ -1,11 +1,16 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import usePagination from '@/hooks/usePagination'
 import { Activity, Calendar1, Calendar1Icon } from 'lucide-react'
-import React from 'react'
+import React, { useState } from 'react'
 
 
 
 
 function Activities() {
+  const handleChange = (e,p) =>{
+  };
+
   return (
     <div className='container mt-8 py-8 px-8 shadow-2xl shadow-green-600'>
       <Card className="px-8 py-8">
@@ -15,7 +20,12 @@ function Activities() {
         </CardHeader>
         <CardContent>
          <Card>
-            
+            <CardFooter>
+              <Button onClick={handleChange}>Next</Button>
+              <Button>
+                Prev
+              </Button>
+            </CardFooter >
          </Card>
         </CardContent>
       </Card>

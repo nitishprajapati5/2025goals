@@ -1,9 +1,14 @@
+"use client"
+
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import styled from 'styled-components';
 import moment from 'moment'
 import { Calendar1Icon } from 'lucide-react';
+import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 // const mark = [
 //   '09-01-2025',
 //   '08-01-2025'
@@ -12,11 +17,12 @@ import { Calendar1Icon } from 'lucide-react';
 function CustomCalendar({mark}) {
   const [date, setDate] = useState(new Date()); // state to handle date selection
   const [selectedDate, setSelectedDate] = useState(null); // state to store the selected date
-  console.log(mark)
+  const [drawerOpen,setDrawerOpen] = useState(false)
   // Handler for tile click (to select a date)
   const handleDateClick = (value) => {
     setSelectedDate(value);  // Set the selected date
-    alert(`You clicked on ${value.toDateString()}`);
+    //alert(`You clicked on ${value.toDateString()}`);
+    setDrawerOpen(true)
   };
 
   // Function to disable dates ahead of today
@@ -34,6 +40,10 @@ function CustomCalendar({mark}) {
     else{
       return '';
     }
+  }
+
+  const handleCloseDrawer = () =>{
+    setDrawerOpen(false)
   }
 
   return (
@@ -57,6 +67,30 @@ function CustomCalendar({mark}) {
           </CalendarContainer>
         </CardContent>
       </Card>
+
+      {/* Drawer Component */}
+      <Drawer className="" open={drawerOpen} onClose={handleCloseDrawer}>
+  <DrawerContent className="flex justify-center items-center">
+    <div className="w-full max-w-md px-6 py-4">
+      <DrawerTitle className="flex items-center justify-center">
+        <h1 className='text-2xl font-bold'>Add Your Activities Here</h1>
+      </DrawerTitle>
+
+      <div className="my-4">
+        {/* You can add your input fields or additional content here */}
+        <Input placeholder="Add your Activities" />
+      </div>
+
+      <DrawerFooter className="flex justify-center">
+        <Button className="mx-2">Submit</Button>
+        <DrawerClose>
+          <Button className="mx-2">Cancel</Button>
+        </DrawerClose>
+      </DrawerFooter>
+    </div>
+  </DrawerContent>
+</Drawer>
+
     </div>
   );
 }
@@ -79,7 +113,14 @@ const CalendarContainer = styled.div`
     padding: 10px 20px;
     background-color: #ff7f50; /* Orange background for the navigation */
     border-radius: 8px 8px 0 0;
-    color: white;
+    color: white;<Drawer open={drawerOpen} onClose={handleCloseDrawer}>
+        <DrawerContent>
+          <h1>Content to Add Here</h1>
+        </DrawerContent>
+        <DrawerFooter>
+          <Button>Submit</Button>
+        </DrawerFooter>
+      </Drawer>
   }
 
   .react-calendar__navigation__label {
