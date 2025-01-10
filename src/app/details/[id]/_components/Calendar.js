@@ -9,6 +9,7 @@ import { Calendar1Icon } from 'lucide-react';
 import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 // const mark = [
 //   '09-01-2025',
 //   '08-01-2025'
@@ -18,12 +19,16 @@ function CustomCalendar({mark}) {
   const [date, setDate] = useState(new Date()); // state to handle date selection
   const [selectedDate, setSelectedDate] = useState(null); // state to store the selected date
   const [drawerOpen,setDrawerOpen] = useState(false)
+  const [sheetOpen,setsheetOpen] = useState(false)
   // Handler for tile click (to select a date)
   const handleDateClick = (value) => {
     setSelectedDate(value);  // Set the selected date
     //alert(`You clicked on ${value.toDateString()}`);
     setDrawerOpen(true)
   };
+
+
+  console.log(mark)
 
   // Function to disable dates ahead of today
   const tileDisabled = ({ date }) => {
@@ -46,12 +51,23 @@ function CustomCalendar({mark}) {
     setDrawerOpen(false)
   }
 
+  const handleActivities = () =>{
+    setDrawerOpen(false)
+  }
+
+  const handleSheetOpen = () =>{
+    setsheetOpen(true)
+  }
+
+
+
   return (
-    <div className='container py-8 px-8 shadow-2xl shadow-orange-600'>
+    <div className='container py-8 px-8 shadow-2xl shadow-orange-600 lg:w-1/2'>
       <Card className="px-8 py-8">
-        <CardHeader className="px-4 py-4">
+        <CardHeader className="px-4 py-4 flex flex-row justify-between">
           <h1 className='text-2xl font-bold px-4 py-4 flex flex-row'>Milestones<Calendar1Icon className='mt-1 ml-2'/>
           </h1>
+          <div className='px-2 py-2'><Button onClick = {handleSheetOpen}>Show All Activities</Button></div>
         </CardHeader>
         <CardContent>
           <CalendarContainer>
@@ -69,27 +85,47 @@ function CustomCalendar({mark}) {
       </Card>
 
       {/* Drawer Component */}
-      <Drawer className="" open={drawerOpen} onClose={handleCloseDrawer}>
-  <DrawerContent className="flex justify-center items-center">
-    <div className="w-full max-w-md px-6 py-4">
-      <DrawerTitle className="flex items-center justify-center">
-        <h1 className='text-2xl font-bold'>Add Your Activities Here</h1>
-      </DrawerTitle>
+        <Drawer className="" open={drawerOpen} onClose={handleCloseDrawer}>
+          <DrawerContent className="flex justify-center items-center">
+          <div className="w-full max-w-md px-6 py-4">
+        <DrawerTitle className="flex items-center justify-center">
+          <h1 className='text-2xl font-bold'>Add Your Activities Here</h1>
+        </DrawerTitle>
 
-      <div className="my-4">
-        {/* You can add your input fields or additional content here */}
-        <Input placeholder="Add your Activities" />
+        <div className="my-4">
+          {/* You can add your input fields or additional content here */}
+          <Input placeholder="Add your Activities" />
+        </div>
+
+        <DrawerFooter className="flex justify-center">
+          <Button className="mx-2" onClick={handleActivities}>Submit</Button>
+          <DrawerClose>
+            <Button className="mx-2">Cancel</Button>
+          </DrawerClose>
+        </DrawerFooter>
       </div>
+    </DrawerContent>
+        </Drawer>
 
-      <DrawerFooter className="flex justify-center">
-        <Button className="mx-2">Submit</Button>
-        <DrawerClose>
-          <Button className="mx-2">Cancel</Button>
-        </DrawerClose>
-      </DrawerFooter>
-    </div>
-  </DrawerContent>
-</Drawer>
+        <Sheet open={sheetOpen} onOpenChange={setsheetOpen}>
+        <SheetContent className="w-[400px] sm:w-[540px]">
+        <SheetHeader>
+        <SheetTitle>Your Activities
+          <h1>January</h1>
+          <h2>Feb</h2>
+        </SheetTitle>
+        <SheetDescription>
+        {mark.map((idx) => (
+          <div>
+            <p>{idx.date}</p>
+            <p>{idx.description}</p>
+          </div>
+         ))}
+        </SheetDescription>
+        </SheetHeader>
+      </SheetContent>
+
+      </Sheet>
 
     </div>
   );
@@ -155,6 +191,7 @@ const CalendarContainer = styled.div`
   .react-calendar__tile:hover {
     background-color: #ffbb77; /* Light orange */
     transform: scale(1.1); /* Slight zoom effect */
+
   }
 
   /* Selected date style */
@@ -184,6 +221,7 @@ const CalendarContainer = styled.div`
   .highlightColor{
     background-color:#A0CED9
   }
+
   
   .react-calendar__month-view__weekdays__weekday{
     display:flex;

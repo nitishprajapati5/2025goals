@@ -20,9 +20,8 @@ const mark = [
 function page() {
   const {id} = useParams()
   return (
-    <div>
+    <div className='flex min-h-screen justify-center items-center'>
        <CustomCalendar mark={mark}/>
-        <Activities />
     </div>
    
   )
