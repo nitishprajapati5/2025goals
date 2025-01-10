@@ -1,7 +1,7 @@
 "use client"
 
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import styled from 'styled-components';
 import moment from 'moment'
@@ -10,16 +10,31 @@ import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerT
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-// const mark = [
-//   '09-01-2025',
-//   '08-01-2025'
-// ]
+import { Badge } from '@/components/ui/badge';
+
 
 function CustomCalendar({mark}) {
   const [date, setDate] = useState(new Date()); // state to handle date selection
   const [selectedDate, setSelectedDate] = useState(null); // state to store the selected date
   const [drawerOpen,setDrawerOpen] = useState(false)
   const [sheetOpen,setsheetOpen] = useState(false)
+  const [sheetData,setSheetData] = useState([])
+
+
+
+  const monthNames = [
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December"
+  ]
+
+  const monthsWithYear = mark.map(item => {
+    const date = new Date(item.date.split("-").reverse().join("-"))
+    return `${monthNames[date.getMonth()]} ${date.getFullYear()}`
+  })
+
+  const uniqueMonthsWithYear = [...new Set(monthsWithYear)]
+  // uniqueMonthsWithYear.push("All")
+
   // Handler for tile click (to select a date)
   const handleDateClick = (value) => {
     setSelectedDate(value);  // Set the selected date
@@ -28,7 +43,8 @@ function CustomCalendar({mark}) {
   };
 
 
-  console.log(mark)
+  // console.log(mark)
+
 
   // Function to disable dates ahead of today
   const tileDisabled = ({ date }) => {
@@ -55,9 +71,82 @@ function CustomCalendar({mark}) {
     setDrawerOpen(false)
   }
 
+
   const handleSheetOpen = () =>{
     setsheetOpen(true)
   }
+
+  function filterByMonthAndYear(data, monthIndex, year) {
+    return data.filter(item => {
+      const date = new Date(item.date.split("-").reverse().join("-"));
+      const itemMonth = date.getMonth();  // 0 for January, 1 for February, etc.
+      const itemYear = date.getFullYear();  // Year of the item
+      return itemMonth === monthIndex && itemYear === parseInt(year, 10);
+    });
+  }
+
+  const handleMonthFilterData = (month) =>{
+    if(month !== 'All'){
+      const monthArray = month.split(" ");
+      const currentMonth = monthArray[0];
+      const year = monthArray[1];
+      const monthIndex = monthNames.indexOf(currentMonth)
+      const filteredData = filterByMonthAndYear(mark,monthIndex,year)
+      setSheetData(filteredData)
+    }
+    else{
+      setSheetData(mark)
+    }
+  }
+
+  function OrganiseDataBasedonMonths(){
+    let res = {}
+    !uniqueMonthsWithYear.map((idx) => {
+
+      // console.log(idx)
+      const [month,year] = idx.split(" ")
+
+      if(!res[`${month} ${year}`]){
+        res[`${month} ${year}`] = {
+          data : []
+        }
+      }
+
+
+      const filteredData = mark.filter(item => {
+        const date = new Date(item.date.split("-").reverse().join("-"));
+        const itemMonth = date.getMonth();
+        const itemYear = date.getFullYear();
+        const monthIndex = new Date(`${month} 1,${year}`).getMonth();
+        return itemMonth === monthIndex && itemYear === parseInt(year);
+      });
+
+      res[`${month} ${year}`].data = filteredData
+
+    })
+
+    //return res;
+    return Object.keys(res).map(monthYear =>{
+      return {
+        monthYear:monthYear,
+        descriptions:res[monthYear].data.map(item => item.description)
+      }
+    })
+  }
+
+  // const res = OrganiseDataBasedonMonths(mark)
+  // console.log(res)
+  // console.log("Res Data",IntoJsonFormat(res))
+
+  // useEffect(() => {
+  //   const res = OrganiseDataBasedonMonths(mark)
+  //   const ans = IntoJsonFormat(res)
+
+  // })
+  useEffect(() => {
+    const res = OrganiseDataBasedonMonths(mark)
+    setSheetData(res)
+  },[])
 
 
 
@@ -74,8 +163,8 @@ function CustomCalendar({mark}) {
             <Calendar
               onChange={setDate}
               value={date}
-              prevLabel="Next Month"
-              nextLabel="Previous Month"
+              prevLabel="Previous Month"
+              nextLabel="Next Month"
               tileDisabled={tileDisabled}  // Disable dates ahead of today
               onClickDay={handleDateClick} 
               tileClassName={tileClassName}
@@ -110,17 +199,26 @@ function CustomCalendar({mark}) {
         <Sheet open={sheetOpen} onOpenChange={setsheetOpen}>
         <SheetContent className="w-[400px] sm:w-[540px]">
         <SheetHeader>
-        <SheetTitle>Your Activities
-          <h1>January</h1>
-          <h2>Feb</h2>
+        <SheetTitle>
+          Your Activities
+          <div>
+            {uniqueMonthsWithYear.map((idx) => (
+              <Badge key={idx} className="m-1" style={{cursor:"pointer"}} onClick={() => handleMonthFilterData(idx)}>{idx}</Badge>
+            ))}
+          </div>
         </SheetTitle>
         <SheetDescription>
-        {mark.map((idx) => (
-          <div>
-            <p>{idx.date}</p>
-            <p>{idx.description}</p>
-          </div>
-         ))}
+        <SheetDescription>
+             {sheetData.length > 0 && sheetData.map((item, index) => (
+                <div key={index}>
+                  <p>{item.monthYear}</p>
+                  <p>{item.descriptions.map((element) => (
+                    <p>{element}</p>
+                    ))
+                  }</p>
+                </div>
+              ))}
+      </SheetDescription>
         </SheetDescription>
         </SheetHeader>
       </SheetContent>
@@ -132,7 +230,7 @@ function CustomCalendar({mark}) {
 }
 
 export default CustomCalendar;
-
+/*Calendar Container SCC */
 const CalendarContainer = styled.div`
   /* ~~~ container styles ~~~ */
   .react-calendar {
