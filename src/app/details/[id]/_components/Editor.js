@@ -1,18 +1,20 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { Button } from '@/components/ui/button';
 
 export default function TinyMCEEditor() {
   const editorRef = useRef(null);
-  const [content, setContent] = useState('');
-
+//   const log = () => {
+//     if (editorRef.current) {
+//       console.log(editorRef.current.getContent());
+//     }
+//   };
     const handleEditorChange = (content,editor) =>{
         console.log(content)
-        setContent(content)
     }
 
     const handleActivities = () => {
-        console.log(content)
+
     }
 
   return (

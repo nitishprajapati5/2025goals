@@ -17,8 +17,8 @@ import TinyMCEEditor from './Editor';
 
 
 function CustomCalendar({mark}) {
-  const [date, setDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [date, setDate] = useState(new Date()); // state to handle date selection
+  const [selectedDate, setSelectedDate] = useState(null); // state to store the selected date
   const [drawerOpen,setDrawerOpen] = useState(false)
   const [sheetOpen,setsheetOpen] = useState(false)
   const [sheetData,setSheetData] = useState([])
@@ -38,16 +38,20 @@ function CustomCalendar({mark}) {
   const uniqueMonthsWithYear = [...new Set(monthsWithYear)]
   uniqueMonthsWithYear.push("All")
 
+  // Handler for tile click (to select a date)
   const handleDateClick = (value) => {
-    setSelectedDate(value);
-    setsheetOpen(true)
-    //setDrawerOpen(true)
+    setSelectedDate(value);  // Set the selected date
+    //alert(`You clicked on ${value.toDateString()}`);
+    setDrawerOpen(true)
   };
+
+
+  // console.log(mark)
 
 
   // Function to disable dates ahead of today
   const tileDisabled = ({ date }) => {
-    return date > new Date();
+    return date > new Date(); // Disable dates that are after today
   };
 
   const tileClassName = ({date}) =>{
@@ -75,13 +79,112 @@ function CustomCalendar({mark}) {
     setsheetOpen(true)
   }
 
+  function filterByMonthAndYear(data, monthIndex, year) {
+    return data.filter(item => {
+      const date = new Date(item.date.split("-").reverse().join("-"));
+      const itemMonth = date.getMonth();  // 0 for January, 1 for February, etc.
+      const itemYear = date.getFullYear();  // Year of the item
+      return itemMonth === monthIndex && itemYear === parseInt(year, 10);
+    });
+  }
+
+  const handleMonthFilterData = (month) =>{
+    let res = {}
+    if(month !== 'All'){
+      const monthArray = month.split(" ");
+      const currentMonth = monthArray[0];
+      const year = monthArray[1];
+      const monthIndex = monthNames.indexOf(currentMonth)
+      const filteredData = filterByMonthAndYear(mark,monthIndex,year)
+      if(!res[`${currentMonth} ${year}`]){
+        res[`${currentMonth} ${year}`] = {
+          data : []
+        }
+      }
+      console.log(filteredData)
+      res[`${currentMonth} ${year}`].data = filteredData
+      console.log(res)
+      const filteredResult =  Object.keys(res).map(monthYear =>{
+        return {
+          monthYear:monthYear,
+          descriptions: res[monthYear].data.map(item => ({
+            description: item.description,
+            date: item.date
+        }))
+        }
+      })
+      console.log("Filtered Data ",filteredData)
+      setSheetData(filteredResult)
+    }
+    else{
+      const res = OrganiseDataBasedonMonths(mark)
+      console.log(res)
+      setSheetData(res)
+    }
+  }
+
+  function OrganiseDataBasedonMonths(mark){
+    let res = {}
+    uniqueMonthsWithYear.pop()
+    !uniqueMonthsWithYear.map((idx) => {
+
+      // console.log(idx)
+      const [month,year] = idx.split(" ")
+
+      if(!res[`${month} ${year}`]){
+        res[`${month} ${year}`] = {
+          data : []
+        }
+      }
+
+
+      const filteredData = mark.filter(item => {
+        const date = new Date(item.date.split("-").reverse().join("-"));
+        const itemMonth = date.getMonth();
+        const itemYear = date.getFullYear();
+        const monthIndex = new Date(`${month} 1,${year}`).getMonth();
+        return itemMonth === monthIndex && itemYear === parseInt(year);
+      });
+
+      res[`${month} ${year}`].data = filteredData
+
+    })
+
+    //return res;
+    return Object.keys(res).map(monthYear =>{
+      return {
+        monthYear:monthYear,
+        descriptions: res[monthYear].data.map(item => ({
+          description: item.description,
+          date: item.date
+      }))
+      }
+    })
+  }
+
+  // const res = OrganiseDataBasedonMonths(mark)
+  // console.log(res)
+  // console.log("Res Data",IntoJsonFormat(res))
+
+  // useEffect(() => {
+  //   const res = OrganiseDataBasedonMonths(mark)
+  //   const ans = IntoJsonFormat(res)
+
+  // })
+  useEffect(() => {
+    const res = OrganiseDataBasedonMonths(mark)
+    setSheetData(res)
+  },[])
+
+
+
   return (
-    <div className='py-8 px-8 shadow-2xl shadow-orange-600 lg:w-full'>
+    <div className='container py-8 px-8 shadow-2xl shadow-orange-600 lg:w-1/2'>
       <Card className="px-8 py-8">
         <CardHeader className="px-4 py-4 flex flex-row justify-between">
           <h1 className='text-2xl font-bold px-4 py-4 flex flex-row'>Milestones<Calendar1Icon className='mt-1 ml-2'/>
           </h1>
-          <div className='px-2 py-2'><Button className="bg-orange-500" onClick = {handleSheetOpen}>Show All Activities</Button></div>
+          <div className='px-2 py-2'><Button onClick = {handleSheetOpen}>Show All Activities</Button></div>
         </CardHeader>
         <CardContent>
           <CalendarContainer>
@@ -90,7 +193,7 @@ function CustomCalendar({mark}) {
               value={date}
               prevLabel="Previous Month"
               nextLabel="Next Month"
-              tileDisabled={tileDisabled}
+              tileDisabled={tileDisabled}  // Disable dates ahead of today
               onClickDay={handleDateClick} 
               tileClassName={tileClassName}
             />
@@ -98,6 +201,7 @@ function CustomCalendar({mark}) {
         </CardContent>
       </Card>
 
+      {/* Drawer Component */}
         <Drawer className="" open={drawerOpen} onClose={handleCloseDrawer}>
           <DrawerContent className="flex justify-center items-center">
           <div className="w-full max-w-max px-6 py-4">
@@ -106,6 +210,8 @@ function CustomCalendar({mark}) {
         </DrawerTitle>
 
         <div className="my-4">
+          {/* You can add your input fields or additional content here */}
+          {/* <textarea placeholder="Add your Activities" /> */}
           <TinyMCEEditor />
         </div>
 
@@ -119,19 +225,30 @@ function CustomCalendar({mark}) {
         </Drawer>
 
         <Sheet open={sheetOpen} onOpenChange={setsheetOpen}>
-        <SheetContent className="lg:w-[800px] sm:w-[540px]">
+        <SheetContent className="w-1/2 sm:w-[540px]">
         <SheetHeader>
         <SheetTitle>
           Your Activities
           <div>
             {uniqueMonthsWithYear.map((idx) => (
-              <Badge key={idx} className="bg-orange-500 m-1" style={{cursor:"pointer"}} onClick={() => handleMonthFilterData(idx)}>{idx}</Badge>
+              <Badge key={idx} className="m-1" style={{cursor:"pointer"}} onClick={() => handleMonthFilterData(idx)}>{idx}</Badge>
             ))}
           </div>
         </SheetTitle>
         <SheetDescription>
         <SheetDescription>
-          <h1>Loading Data</h1>
+        {/* {sheetData.length > 0 && sheetData.map((item, index) => (
+            <div>
+              <span className='text-xl font-bold text-zinc-950'>{item.monthYear}</span>
+              {item.descriptions.map((element, idx) => (
+                <p key={idx} className='text-lg'>
+                  <p className='text-sm text-gray-500'>{element.date} -
+                  {element.description} </p>
+                </p>
+            ))}
+            <Separator className="my-4" />
+          </div>
+        ))} */}
 
       </SheetDescription>
         </SheetDescription>

@@ -1,13 +1,9 @@
 "use client"
-
-import React, { useState } from 'react'
-import Navbar from './_components/Navbar'
-import HeatMapCard from './_components/HeatMapCard'
-import Subscribe from './_components/Subscribe'
-import ListGoals from './_components/ListGoals'
+import { useParams, useRouter } from 'next/navigation'
+import React from 'react'
 import Calendar from './_components/Calendar'
-import { useSearchParams } from 'next/navigation'
-import Loading from '../_components/page'
+import CustomCalendar from './_components/Calendar'
+import Activities from './_components/Activities'
 
 const mark = [
   {
@@ -69,25 +65,13 @@ const mark = [
 ]
 
 function page() {
-  const [loading,setLoading] = useState(true)
+  const {id} = useParams()
 
-  if(loading){
-    return <Loading />
-  }
   return (
-    <div className='container min-h-screen w-full'>
-      <Subscribe />
-      <Navbar />
-      <div className='m-3 grid sm:grid-cols-1 lg:grid-cols-2'>
-        <div>
-        <Calendar mark={mark} />
-        </div>
-        <div className=''>
-        <ListGoals />
-        </div>
-      </div>
-
+    <div className='flex min-h-screen justify-center items-center'>
+       <CustomCalendar mark={mark}/>
     </div>
+   
   )
 }
 
