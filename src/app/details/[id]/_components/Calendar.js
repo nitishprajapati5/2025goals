@@ -33,7 +33,7 @@ function CustomCalendar({mark}) {
   })
 
   const uniqueMonthsWithYear = [...new Set(monthsWithYear)]
-  // uniqueMonthsWithYear.push("All")
+  uniqueMonthsWithYear.push("All")
 
   // Handler for tile click (to select a date)
   const handleDateClick = (value) => {
@@ -86,20 +86,37 @@ function CustomCalendar({mark}) {
   }
 
   const handleMonthFilterData = (month) =>{
+    let res = {}
     if(month !== 'All'){
       const monthArray = month.split(" ");
       const currentMonth = monthArray[0];
       const year = monthArray[1];
       const monthIndex = monthNames.indexOf(currentMonth)
       const filteredData = filterByMonthAndYear(mark,monthIndex,year)
-      setSheetData(filteredData)
+      if(!res[`${currentMonth} ${year}`]){
+        res[`${currentMonth} ${year}`] = {
+          data : []
+        }
+      }
+      console.log(filteredData)
+      res[`${currentMonth} ${year}`].data = filteredData
+      console.log(res)
+      const filteredResult = Object.keys(res).map(monthYear =>{
+        return {
+          monthYear:monthYear,
+          descriptions:res[monthYear].data.map(item => item.description)
+        }
+      })
+      console.log("Filtered Data ",filteredData)
+      setSheetData(filteredResult)
     }
     else{
-      setSheetData(mark)
+      const res = OrganiseDataBasedonMonths(mark)
+      setSheetData(res)
     }
   }
 
-  function OrganiseDataBasedonMonths(){
+  function OrganiseDataBasedonMonths(mark){
     let res = {}
     !uniqueMonthsWithYear.map((idx) => {
 
@@ -211,7 +228,7 @@ function CustomCalendar({mark}) {
         <SheetDescription>
              {sheetData.length > 0 && sheetData.map((item, index) => (
                 <div key={index}>
-                  <p>{item.monthYear}</p>
+                  <span>{item.monthYear}</span>
                   <p>{item.descriptions.map((element) => (
                     <p>{element}</p>
                     ))
