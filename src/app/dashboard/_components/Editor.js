@@ -2,17 +2,19 @@ import React, { useRef, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { Button } from '@/components/ui/button';
 
-export default function TinyMCEEditor() {
+export default function TinyMCEEditor({EditorData,onEditorChange}) {
   const editorRef = useRef(null);
   const [content, setContent] = useState('');
 
     const handleEditorChange = (content,editor) =>{
         console.log(content)
         setContent(content)
+        EditorData(content)
     }
 
     const handleActivities = () => {
         console.log(content)
+        EditorData(content)
     }
 
   return (
@@ -35,9 +37,8 @@ export default function TinyMCEEditor() {
           'removeformat | help',
           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
         }}
-        onEditorChange={handleEditorChange}
+        onEditorChange={onEditorChange}
       />
-        <Button className="mt-4 w-full" onClick={handleActivities}>Submit</Button>
 
       {/* <button onClick={log}>Log editor content</button> */}
     </>

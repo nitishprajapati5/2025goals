@@ -1,6 +1,6 @@
 "use client"
 import { useParams, useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useState } from 'react'
 import Calendar from './_components/Calendar'
 import CustomCalendar from './_components/Calendar'
 import Activities from './_components/Activities'
@@ -67,9 +67,19 @@ const mark = [
 function page() {
   const {id} = useParams()
 
+  const [selectedDate,setSelectedDate] = useState(null)
+
+  const handleDateClick = (date) => {
+    console.log(date)
+    setSelectedDate(date)
+  }
+
   return (
-    <div className='flex min-h-screen justify-center items-center'>
-       <CustomCalendar mark={mark}/>
+    <div className='container grid sm:grid-cols-1 lg:grid-cols-2 min-h-screen justify-center items-center'>
+       <CustomCalendar mark={mark} onDateClick={handleDateClick}/>
+       <div className='flex justify-center mt-2 py-8 px-8'>
+        <Activities selectedDate={selectedDate}/>
+       </div>
     </div>
    
   )

@@ -11,39 +11,35 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import Editor from './Editor';
 import TinyMCEEditor from './Editor';
 
 
-function CustomCalendar({mark}) {
+function CustomCalendar({mark,onDateClick}) {
   const [date, setDate] = useState(new Date()); // state to handle date selection
-  const [selectedDate, setSelectedDate] = useState(null); // state to store the selected date
   const [drawerOpen,setDrawerOpen] = useState(false)
   const [sheetOpen,setsheetOpen] = useState(false)
-  const [sheetData,setSheetData] = useState([])
 
 
 
-  const monthNames = [
-    "January","February","March","April","May","June",
-    "July","August","September","October","November","December"
-  ]
+  // const monthNames = [
+  //   "January","February","March","April","May","June",
+  //   "July","August","September","October","November","December"
+  // ]
 
-  const monthsWithYear = mark.map(item => {
-    const date = new Date(item.date.split("-").reverse().join("-"))
-    return `${monthNames[date.getMonth()]} ${date.getFullYear()}`
-  })
+  // const monthsWithYear = mark.map(item => {
+  //   const date = new Date(item.date.split("-").reverse().join("-"))
+  //   return `${monthNames[date.getMonth()]} ${date.getFullYear()}`
+  // })
 
-  const uniqueMonthsWithYear = [...new Set(monthsWithYear)]
-  uniqueMonthsWithYear.push("All")
+  // const uniqueMonthsWithYear = [...new Set(monthsWithYear)]
+  // uniqueMonthsWithYear.push("All")
 
-  // Handler for tile click (to select a date)
-  const handleDateClick = (value) => {
-    setSelectedDate(value);  // Set the selected date
-    //alert(`You clicked on ${value.toDateString()}`);
-    setDrawerOpen(true)
-  };
+  // // Handler for tile click (to select a date)
+  // const handleDateClick = (value) => {
+  //   setSelectedDate(value);  // Set the selected date
+  //   //alert(`You clicked on ${value.toDateString()}`);
+  //   setDrawerOpen(true)
+  // };
 
 
   // console.log(mark)
@@ -66,125 +62,126 @@ function CustomCalendar({mark}) {
     }
   }
 
-  const handleCloseDrawer = () =>{
-    setDrawerOpen(false)
-  }
+  // const handleCloseDrawer = () =>{
+  //   setDrawerOpen(false)
+  // }
 
-  const handleActivities = () =>{
-    setDrawerOpen(false)
-  }
-
-
-  const handleSheetOpen = () =>{
-    setsheetOpen(true)
-  }
-
-  function filterByMonthAndYear(data, monthIndex, year) {
-    return data.filter(item => {
-      const date = new Date(item.date.split("-").reverse().join("-"));
-      const itemMonth = date.getMonth();  // 0 for January, 1 for February, etc.
-      const itemYear = date.getFullYear();  // Year of the item
-      return itemMonth === monthIndex && itemYear === parseInt(year, 10);
-    });
-  }
-
-  const handleMonthFilterData = (month) =>{
-    let res = {}
-    if(month !== 'All'){
-      const monthArray = month.split(" ");
-      const currentMonth = monthArray[0];
-      const year = monthArray[1];
-      const monthIndex = monthNames.indexOf(currentMonth)
-      const filteredData = filterByMonthAndYear(mark,monthIndex,year)
-      if(!res[`${currentMonth} ${year}`]){
-        res[`${currentMonth} ${year}`] = {
-          data : []
-        }
-      }
-      console.log(filteredData)
-      res[`${currentMonth} ${year}`].data = filteredData
-      console.log(res)
-      const filteredResult =  Object.keys(res).map(monthYear =>{
-        return {
-          monthYear:monthYear,
-          descriptions: res[monthYear].data.map(item => ({
-            description: item.description,
-            date: item.date
-        }))
-        }
-      })
-      console.log("Filtered Data ",filteredData)
-      setSheetData(filteredResult)
-    }
-    else{
-      const res = OrganiseDataBasedonMonths(mark)
-      console.log(res)
-      setSheetData(res)
-    }
-  }
-
-  function OrganiseDataBasedonMonths(mark){
-    let res = {}
-    uniqueMonthsWithYear.pop()
-    !uniqueMonthsWithYear.map((idx) => {
-
-      // console.log(idx)
-      const [month,year] = idx.split(" ")
-
-      if(!res[`${month} ${year}`]){
-        res[`${month} ${year}`] = {
-          data : []
-        }
-      }
+  // const handleActivities = () =>{
+  //   setDrawerOpen(false)
+  // }
 
 
-      const filteredData = mark.filter(item => {
-        const date = new Date(item.date.split("-").reverse().join("-"));
-        const itemMonth = date.getMonth();
-        const itemYear = date.getFullYear();
-        const monthIndex = new Date(`${month} 1,${year}`).getMonth();
-        return itemMonth === monthIndex && itemYear === parseInt(year);
-      });
+  // const handleSheetOpen = () =>{
+  //   setsheetOpen(true)
+  // }
 
-      res[`${month} ${year}`].data = filteredData
+  // function filterByMonthAndYear(data, monthIndex, year) {
+  //   return data.filter(item => {
+  //     const date = new Date(item.date.split("-").reverse().join("-"));
+  //     const itemMonth = date.getMonth();  // 0 for January, 1 for February, etc.
+  //     const itemYear = date.getFullYear();  // Year of the item
+  //     return itemMonth === monthIndex && itemYear === parseInt(year, 10);
+  //   });
+  // }
 
-    })
+  // const handleMonthFilterData = (month) =>{
+  //   let res = {}
+  //   if(month !== 'All'){
+  //     const monthArray = month.split(" ");
+  //     const currentMonth = monthArray[0];
+  //     const year = monthArray[1];
+  //     const monthIndex = monthNames.indexOf(currentMonth)
+  //     const filteredData = filterByMonthAndYear(mark,monthIndex,year)
+  //     if(!res[`${currentMonth} ${year}`]){
+  //       res[`${currentMonth} ${year}`] = {
+  //         data : []
+  //       }
+  //     }
+  //     console.log(filteredData)
+  //     res[`${currentMonth} ${year}`].data = filteredData
+  //     console.log(res)
+  //     const filteredResult =  Object.keys(res).map(monthYear =>{
+  //       return {
+  //         monthYear:monthYear,
+  //         descriptions: res[monthYear].data.map(item => ({
+  //           description: item.description,
+  //           date: item.date
+  //       }))
+  //       }
+  //     })
+  //     console.log("Filtered Data ",filteredData)
+  //     setSheetData(filteredResult)
+  //   }
+  //   else{
+  //     const res = OrganiseDataBasedonMonths(mark)
+  //     console.log(res)
+  //     setSheetData(res)
+  //   }
+  // }
 
-    //return res;
-    return Object.keys(res).map(monthYear =>{
-      return {
-        monthYear:monthYear,
-        descriptions: res[monthYear].data.map(item => ({
-          description: item.description,
-          date: item.date
-      }))
-      }
-    })
-  }
+  // function OrganiseDataBasedonMonths(mark){
+  //   let res = {}
+  //   uniqueMonthsWithYear.pop()
+  //   !uniqueMonthsWithYear.map((idx) => {
 
-  // const res = OrganiseDataBasedonMonths(mark)
-  // console.log(res)
-  // console.log("Res Data",IntoJsonFormat(res))
+  //     // console.log(idx)
+  //     const [month,year] = idx.split(" ")
 
+  //     if(!res[`${month} ${year}`]){
+  //       res[`${month} ${year}`] = {
+  //         data : []
+  //       }
+  //     }
+
+
+  //     const filteredData = mark.filter(item => {
+  //       const date = new Date(item.date.split("-").reverse().join("-"));
+  //       const itemMonth = date.getMonth();
+  //       const itemYear = date.getFullYear();
+  //       const monthIndex = new Date(`${month} 1,${year}`).getMonth();
+  //       return itemMonth === monthIndex && itemYear === parseInt(year);
+  //     });
+
+  //     res[`${month} ${year}`].data = filteredData
+
+  //   })
+
+  //   //return res;
+  //   return Object.keys(res).map(monthYear =>{
+  //     return {
+  //       monthYear:monthYear,
+  //       descriptions: res[monthYear].data.map(item => ({
+  //         description: item.description,
+  //         date: item.date
+  //     }))
+  //     }
+  //   })
+  // }
+
+  // // const res = OrganiseDataBasedonMonths(mark)
+  // // console.log(res)
+  // // console.log("Res Data",IntoJsonFormat(res))
+
+  // // useEffect(() => {
+  // //   const res = OrganiseDataBasedonMonths(mark)
+  // //   const ans = IntoJsonFormat(res)
+
+  // // })
   // useEffect(() => {
   //   const res = OrganiseDataBasedonMonths(mark)
-  //   const ans = IntoJsonFormat(res)
+  //   setSheetData(res)
+  // },[])
 
-  // })
-  useEffect(() => {
-    const res = OrganiseDataBasedonMonths(mark)
-    setSheetData(res)
-  },[])
-
-
+  const handleDateClick = (date) =>{
+    onDateClick(date)
+  }
 
   return (
-    <div className='container py-8 px-8 shadow-2xl shadow-orange-600 lg:w-1/2'>
+    <div className='container py-8 px-8 shadow-2xl shadow-orange-600 lg:w-full'>
       <Card className="px-8 py-8">
         <CardHeader className="px-4 py-4 flex flex-row justify-between">
           <h1 className='text-2xl font-bold px-4 py-4 flex flex-row'>Milestones<Calendar1Icon className='mt-1 ml-2'/>
           </h1>
-          <div className='px-2 py-2'><Button onClick = {handleSheetOpen}>Show All Activities</Button></div>
         </CardHeader>
         <CardContent>
           <CalendarContainer>
@@ -202,29 +199,31 @@ function CustomCalendar({mark}) {
       </Card>
 
       {/* Drawer Component */}
-        <Drawer className="" open={drawerOpen} onClose={handleCloseDrawer}>
+      
+      {/* <Drawer className="" open={drawerOpen} onClose={handleCloseDrawer}>
           <DrawerContent className="flex justify-center items-center">
           <div className="w-full max-w-max px-6 py-4">
         <DrawerTitle className="flex items-center justify-center">
           <h1 className='text-2xl font-bold'>Add Your Journal Activity Here</h1>
-        </DrawerTitle>
+        </DrawerTitle> */}
 
-        <div className="my-4">
-          {/* You can add your input fields or additional content here */}
-          {/* <textarea placeholder="Add your Activities" /> */}
+        {/* <div className="my-4">
           <TinyMCEEditor />
-        </div>
+        </div> */}
 
-        <DrawerFooter className="flex justify-center">
+        {/* <DrawerFooter className="flex justify-center">
           <DrawerClose>
             <Button className="mx-2">Cancel</Button>
           </DrawerClose>
         </DrawerFooter>
       </div>
     </DrawerContent>
-        </Drawer>
+        </Drawer> */}
+      
+       
 
-        <Sheet open={sheetOpen} onOpenChange={setsheetOpen}>
+      {/* <div>
+      <Sheet open={sheetOpen} onOpenChange={setsheetOpen}>
         <SheetContent className="w-1/2 sm:w-[540px]">
         <SheetHeader>
         <SheetTitle>
@@ -250,12 +249,14 @@ function CustomCalendar({mark}) {
           </div>
         ))} */}
 
-      </SheetDescription>
+      {/* </SheetDescription>
         </SheetDescription>
         </SheetHeader>
       </SheetContent>
 
       </Sheet>
+      </div> */} 
+       
 
     </div>
   );

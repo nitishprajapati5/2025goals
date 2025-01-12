@@ -7,7 +7,8 @@ import Subscribe from './_components/Subscribe'
 import ListGoals from './_components/ListGoals'
 import Calendar from './_components/Calendar'
 import { useSearchParams } from 'next/navigation'
-import Loading from '../_components/page'
+import { Loading } from '../_components/ComponentLoading'
+import { PageLoading } from '../_components/PageLoading'
 
 const mark = [
   {
@@ -71,9 +72,9 @@ const mark = [
 function page() {
   const [loading,setLoading] = useState(true)
 
-  if(loading){
-    return <Loading />
-  }
+  // if(loading){
+  //   return <PageLoading />
+  // }
   return (
     <div className='container min-h-screen w-full'>
       <Subscribe />

@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import TinyMCEEditor from './Editor'
 import { Input } from '@/components/ui/input'
-import Loading from '@/app/_components/page'
+import Loading from '@/app/_components/ComponentLoading'
 
 const data = [
     {

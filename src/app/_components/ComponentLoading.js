@@ -2,7 +2,8 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export function Loading() {
   return (
-    <div className="flex items-center space-x-4">
+    //TODO To add Sketleton here
+    <div className="flex justify-center items-center space-x-4">
       <Skeleton className="h-12 w-12 rounded-full" />
       <div className="space-y-2">
         <Skeleton className="h-4 w-[250px]" />
