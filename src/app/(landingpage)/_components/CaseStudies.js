@@ -2,7 +2,7 @@
 import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card'
 import { DollarSign, Goal, HeartPulse, LucideHandshake } from 'lucide-react'
 import React from 'react'
-
+import * as motion from "motion/react-client"
 const data = [
     {
         "id":1,
@@ -41,8 +41,10 @@ function CaseStudies() {
     <div className='mt-10 bg-white w-2/3 px-8 py-8'>
     <h1 className='text-3xl'>Our Case Studies</h1>
 
-    <div className='grid sm:grid-cols-1 lg:grid-cols-2 gap-4'>
+    <div className='grid sm:grid-cols-1 lg:grid-cols-2 gap-8'>
     {data.map((idx,element) => (
+       <motion.div whileHover={{scale:1.2}} whileTap={{scale:0.8}}>
+
        <Card key={idx.id} className="mt-4 w-full shadow-xl shadow-red-200" style={{backgroundColor: idx.backgroundColor}} >
         <CardHeader>{idx.icon}</CardHeader>
         <CardContent>
@@ -54,6 +56,8 @@ function CaseStudies() {
             </CardDescription>
         </CardContent>
        </Card>
+       </motion.div>
+
 
     ))}
     

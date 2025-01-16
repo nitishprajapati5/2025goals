@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton"
 
-export function PageLoading() {
+export default function PageLoading() {
   let skeletonNumber = 5
   return (
     <div className="flex min-h-screen justify-center flex-col items-center">
