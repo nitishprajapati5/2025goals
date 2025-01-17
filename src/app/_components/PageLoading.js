@@ -1,6 +1,12 @@
 import { Skeleton } from "@/components/ui/skeleton"
+import { useSkeleton } from "../_contexts/SkeletonContext"
 
 export default function PageLoading() {
+
+   const {isSkeletonVisible} = useSkeleton();
+
+   if(!isSkeletonVisible) return null
+
   let skeletonNumber = 5
   return (
     <div className="flex min-h-screen justify-center flex-col items-center">

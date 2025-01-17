@@ -7,16 +7,32 @@ import React from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
+import { useProgress } from '@/app/_contexts/ProgressContext'
+import { useForm } from 'react-hook-form'
+import axios from 'axios'
+import * as APIConstants from '../../../_utils/ApiConstants'
 
 function LoginCard() {
     const router = useRouter()
-    const handleSubmit = () => {
-        router.push("/dashboard")
+    const {showProgress,hideProgress} = useProgress()
+
+    const {register,handleSubmit,formState:{errors}} = useForm()
+
+    const onSubmit = (data) => {
+        console.log('Console Data',data)
+        showProgress()
+        const endpoint = APIConstants.API + "/" + APIConstants.AUTH
+        axios.post(endpoint,{
+          endpoint:APIConstants.LOGINENDPOINT,
+          requestBody:data
+        })
+        hideProgress()
+        //router.push("/dashboard")
     }
 
     return (
        <div className='w-1/2'>
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
         <Card className="sm:w-[450px] lg:w-[500px] shadow-2xl shadow-green-400">
         <CardHeader>
             <CardTitle>Login Here</CardTitle>
@@ -26,11 +42,30 @@ function LoginCard() {
               <div className="grid w-full items-center gap-4">
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="name">Email</Label>
-                  <Input id="email" type="email" placeholder="Enter your Email" />
+                  <Input 
+                    id="email" 
+                    type="email" 
+                    placeholder="Enter your Email" 
+                    {...register("email",
+                      {required:"Email is required",
+                        pattern:{
+                          value: /\S+@\S+\.\S+/,
+                          message:"Email is invalid"
+                        }
+                      }
+                      )}
+                    />
+                    {errors.email && <p className='text-red-500'>{errors.email.message}</p>}
                 </div>
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="name">Password</Label>
-                  <Input id="password" type="password" placeholder="Enter your Password" />
+                  <Input 
+                    id="password" 
+                    type="password" 
+                    placeholder="Enter your Password" 
+                    {...register("password",{required:"Password is Required"})}  
+                  />
+                  {errors.password && <p className='text-red-500'>{errors.password.message}</p>}
                 </div>
               </div>
           </CardContent>

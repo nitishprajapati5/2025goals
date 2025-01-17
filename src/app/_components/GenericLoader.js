@@ -8,12 +8,12 @@ export default function GenericLoadingComponent({typeofLoading}){
             {
             (() => {
               switch(typeofLoading){
-                case 'componentLoading':
+                case 'ComponentLoading':
                     return <ComponentLoading /> 
-                case 'pageLoading':
+                case 'PageLoading':
                     return <PageLoading />
                 case 'ProgressBar':
-                    return <ProgressBar /> 
+                    return ProgressBar 
                 default:
                     return null
               }  
