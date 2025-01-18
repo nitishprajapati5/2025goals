@@ -11,6 +11,7 @@ import { useProgress } from '@/app/_contexts/ProgressContext'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import * as APIConstants from '../../../_utils/ApiConstants'
+import { toast } from 'sonner'
 
 function LoginCard() {
     const router = useRouter()
@@ -26,7 +27,16 @@ function LoginCard() {
           endpoint:APIConstants.LOGINENDPOINT,
           requestBody:data
         })
-        hideProgress()
+        .then((res) => {
+          router.push("/dashboard")
+        }).catch((error) => {
+          console.log(error)
+          toast.error("Something went Wrong!")
+        })
+        .finally(
+          hideProgress()
+        )
+        //hideProgress()
         //router.push("/dashboard")
     }
 

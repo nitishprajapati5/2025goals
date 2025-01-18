@@ -9,10 +9,14 @@ import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import * as APIConstants from '../../../_utils/ApiConstants'
 import { useProgress } from '@/app/_contexts/ProgressContext'
+import { useRouter } from 'next/navigation'
 
 function RegistrationCard() {
+
     const {showProgress,hideProgress} = useProgress();
     const {register,handleSubmit,formState:{errors}} = useForm()
+    const router = useRouter();
+
     const onSubmit = (data) => {
       console.log(data)
       showProgress()
@@ -20,8 +24,15 @@ function RegistrationCard() {
       axios.post(route,{
         endpoint:APIConstants.REGISTRATIONENDPOINT,
         requestBody:data
-      })
-      hideProgress()
+      }).then((res) => {
+        router.push('/dashboard')
+      }).catch((error) => {
+         console.log(error)
+      }).finally(
+        hideProgress()
+      )
+
+      //hideProgress()
     }
 
 

@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react'
 import TinyMCEEditor from './Editor'
 import { Input } from '@/components/ui/input'
 import Loading from '@/app/_components/ComponentLoading'
+import { useForm } from 'react-hook-form'
 
 const data = [
     {
@@ -45,12 +46,7 @@ function ListGoals() {
  const router = useRouter()
  const [drawerOpen,setDrawerOpen] = useState(false)
  const [journalContent,setJournalContent] = useState('')
-//  const [loading,setLoading] = useState(true)
 
-
-//  useEffect(() => {
-//   setLoading(false)
-//  },500000)
 
  const handleCreateGoal = () =>{
     //router.push("/create")
@@ -66,21 +62,24 @@ function ListGoals() {
 }
 
 const handleInputChange = (e) => {
-  setLoading(true)
   setJournalContent(e.target.value);
 };
 
-// if(loading){
-//   return <Loading />
-// }
 
-// Handle form submission
-const handleCreateJournal = (e) => {
-  e.preventDefault(); // Prevent page reload on form submission
-  console.log("Journal Content:", journalContent);
-  // You can call any function here to process the journal content
-  setJournalContent(''); // Reset the input field after submission
-};
+const {register,handleSubmit,formState:{errors}} = useForm()
+
+
+// // Handle form submission
+// const handleCreateJournal = (e) => {
+//   e.preventDefault(); // Prevent page reload on form submission
+//   console.log("Journal Content:", journalContent);
+//   // You can call any function here to process the journal content
+//   setJournalContent(''); // Reset the input field after submission
+// };
+
+const onSubmit = (data) => {
+  
+}
 
   return (
     <>
@@ -111,25 +110,22 @@ const handleCreateJournal = (e) => {
         <DrawerTitle className="flex items-center justify-center">
           <h1 className='text-2xl font-bold'>Add Your Journal Activity Here</h1>
         </DrawerTitle>
-        <form onSubmit={handleCreateJournal}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <Input
              className="mt-2"
              placeholder="Enter your Journal here"
-             value={journalContent}
-             onChange={handleInputChange}
+            //  value={journalContent}
+            //  onChange={handleInputChange}
+            {...register("journalName",
+            {required:"Please enter your journal name"})}
 
             />
+            {errors.journalName && <p className='text-red-500'>{errors.journalName.message}</p>}
             <div className='flex justify-center items-center mt-2 w-full'>
             <Button className="w-full">Submit</Button>
 
             </div>
         </form>
-
-        <DrawerFooter className="flex justify-center">
-          <DrawerClose>
-            <Button className="w-full">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
       </div>
     </DrawerContent>
         </Drawer>

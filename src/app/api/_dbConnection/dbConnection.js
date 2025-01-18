@@ -5,7 +5,13 @@ const prisma = new PrismaClient({
 })
 export default async function dbConnection(){
     try{
-        await prisma.$connect();
+        await prisma.$connect().then(() => {
+            console.log("Database Connected")
+            return true
+        }).catch((error) => {
+            console.log(error)
+            return false
+        });
         console.log("Data base Connected Successfully");
     }
     catch(error){
