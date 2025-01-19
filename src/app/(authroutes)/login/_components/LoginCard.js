@@ -36,8 +36,7 @@ function LoginCard() {
         .finally(
           hideProgress()
         )
-        //hideProgress()
-        //router.push("/dashboard")
+       
     }
 
     return (

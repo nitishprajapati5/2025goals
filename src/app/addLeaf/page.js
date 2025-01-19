@@ -7,13 +7,16 @@ import TinyMCEEditor from '../dashboard/_components/Editor'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowRightCircleIcon } from 'lucide-react'
+import { useFormState } from 'react-hook-form'
 
 function page() {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [editorData, setEditorData] = useState('')
     const [file,setFile] = useState(null)
+    const [date,setDateData] = useState('')
     const [filePreview,setFilePreview] = useState(null)
+
 
     const  handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
@@ -35,6 +38,10 @@ function page() {
         setEditorData(newContent)
     }
 
+    const handleDateChange = (e) => {
+        setDateData(e.target.value)
+    }
+
     const handleTitleChange = (e) => {
         setTitle(e.target.value)
     }
@@ -46,6 +53,7 @@ function page() {
     const handleFormSubmit = () => {
         const data = new FormData()
         data.append('title',title)
+        data.append('date',date)
         data.append('description',description)
         data.append('editorData',editorData)
         data.append('file',file)
@@ -56,20 +64,33 @@ function page() {
     return (
         <>
             <div className='grid min-h-screen sm:grid-cols-1 lg:grid-cols-2 justify-center items-center container w-full'>
-                <div className=''>
+                <div className='container mt-2'>
                     <div className='flex flex-row justify-between'>
                         <h1 className='text-2xl font-extrabold flex flex-row'>Create Your Journal <ArrowRightCircleIcon className='m-1 animate-bounce' /></h1>
                         <Button onClick={handleFormSubmit}>Submit</Button>
                     </div>
                     <form onSubmit={handleFormSubmit}>
-                        <div>
+                        <div className='flex flex-row justify-between'>
+                        <div className='w-full px-4 py-4'>
                             <Label className="text-xl font-extrabold">Title to Your Journal</Label>
                             <Input
-                                className="mt-2"
+                                className="mt-2 w-full"
                                 placeholder="Add the Title"
                                 value={title}
                                 onChange={handleTitleChange}
                             />
+                        </div>
+
+                        <div className='w-full px-4 py-4'>
+                            <Label className="text-xl font-extrabold">Title to Your Journal</Label>
+                            <Input
+                                className="mt-2"
+                                placeholder="Add Date"
+                                value={date}
+                                onChange={handleDateChange}
+                                type="date"
+                            />
+                        </div>
                         </div>
 
                         <div className='mt-4'>
