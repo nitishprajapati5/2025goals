@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Activity, Edit, Leaf } from 'lucide-react'
 import moment from 'moment'
-import { PageLoading } from '@/app/_components/PageLoading'
-import { Loading } from '@/app/_components/ComponentLoading'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 

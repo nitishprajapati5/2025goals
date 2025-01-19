@@ -1,7 +1,7 @@
 "use client"
 import { useParams, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
-import Calendar from './_components/Calendar'
+// import Calendar from './_components/Calendar'
 import CustomCalendar from './_components/Calendar'
 import Activities from './_components/Activities'
 
