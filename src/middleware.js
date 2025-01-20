@@ -10,36 +10,48 @@ import axios from "axios";
 
 const prisma = new PrismaClient()
 
-// async function verifyJWT(authCookie){
-//     const data = jwt.decode(authCookie,process.env.JWT_SECRET_KEY)
-//     let isLoggedIn = true;
-//     if(data.exp * 1000 < Date.now()){
-//         isLoggedIn = false
-//     }
-//     const user = await prisma.registration.findFirst({
-//         where:{
-//             AND:{
-//                 username:data.user.username,
-//                 password:data.user.password
-//             }
-//         }
-//     })
-
-//     return {user,isLoggedIn};
-    
-// }
-
 export default async function middleware(request){
-    console.log("Middleware Hit")
 
-    const isLoggedIn = await verifyIsLoggedIn(request)
-    if(!isLoggedIn){
-        NextResponse.redirect(new URL("/login"),request.url)
+    // console.log("----------------------------data-----------------------",data)
+    // console.log(request.nextUrl.pathname)
+    if(request.nextUrl.pathname === '/api/auth'){
+        return NextResponse.next()
     }
+    if(request.nextUrl.pathname !== '/api/auth'){
+        // const isLoggedIn = await verifyIsLoggedIn(request)
+        // const cookieStore = cookies()
+        // console.log(request)
+        // const authCookie = (await cookieStore).get('auth-cookie').value
+
+        // await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/hello`,{
+        //     method:"GET"
+        // }).then( async res => {
+        //     console.log("Hi Nitish JSON Generating",await res.json())
+        // }).catch((error) => {
+        //     console.log(error)
+        // })
+
+        const data = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE}/api/verifyAuthToken`,{
+            headers:{
+                "Authorization":request.cookies.get('auth-cookie')
+            }
+        })
+        //console.log(data.json())
+        // const ans = await data.json()
+
+
+        // console.log(ans)
+
+        // if(!isLoggedIn){
+        //     return NextResponse.redirect(new URL("/login"),request.url)
+        // }
+    }
+
+    return NextResponse.next();
    
-    return NextResponse.next()
+   
 }
 
 export const config = {
-    matcher: ['/api/:auth','/'] // You can customize this to target specific API routes
+    matcher: ['/api/:auth','/api/verifyAuthToken'] // You can customize this to target specific API routes
 };
