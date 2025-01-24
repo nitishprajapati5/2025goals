@@ -28,6 +28,7 @@ function LoginCard() {
           requestBody:data
         })
         .then((res) => {
+          console.log(res)
           router.push("/dashboard")
         }).catch((error) => {
           console.log(error)

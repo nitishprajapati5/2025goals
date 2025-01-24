@@ -17,34 +17,14 @@ export default async function middleware(request){
     if(request.nextUrl.pathname === '/api/auth'){
         return NextResponse.next()
     }
-    if(request.nextUrl.pathname !== '/api/auth'){
-        // const isLoggedIn = await verifyIsLoggedIn(request)
-        // const cookieStore = cookies()
-        // console.log(request)
-        // const authCookie = (await cookieStore).get('auth-cookie').value
-
-        // await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/hello`,{
-        //     method:"GET"
-        // }).then( async res => {
-        //     console.log("Hi Nitish JSON Generating",await res.json())
-        // }).catch((error) => {
-        //     console.log(error)
-        // })
-
-        const data = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE}/api/verifyAuthToken`,{
-            headers:{
-                "Authorization":request.cookies.get('auth-cookie')
-            }
-        })
-        //console.log(data.json())
-        // const ans = await data.json()
-
-
+    if(request.nextUrl.pathname !== '/api/auth'){    
+        console.log(request)   
+        const isLoggedIn = verifyIsLoggedIn(request);
         // console.log(ans)
 
-        // if(!isLoggedIn){
-        //     return NextResponse.redirect(new URL("/login"),request.url)
-        // }
+        if(!isLoggedIn){
+            return NextResponse.redirect(new URL("/login"),request.url)
+        }
     }
 
     return NextResponse.next();
