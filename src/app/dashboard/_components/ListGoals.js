@@ -13,6 +13,7 @@ import Loading from '@/app/_components/ComponentLoading';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import * as APIConstants from '../../_utils/ApiConstants';
+import { toast } from 'sonner';
 
 export default function ListGoals() {
   const router = useRouter();
@@ -21,22 +22,41 @@ export default function ListGoals() {
 
   // Fetch journal data
   useEffect(() => {
-    const endpoint = APIConstants.API + "/" + APIConstants.JOURNAL;
-    axios.post(endpoint, {
-      requestBody: {
-        endpoint: APIConstants.GETJOURNALENDPOINT,
-      }
-    },{
+    // const endpoint = APIConstants.getAllJournals
+    // console.log(endpoint)
+    // axios.get(endpoint, 
+    // {
+    //   withCredentials:true
+    // })
+    //   .then((res) => {
+    //     console.log(res.data.responseBody.data);
+    //     toast.success("Successfully Fetched the Data")
+    //     setData(res.data.responseBody.data);  // Store the journal data in state
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     toast.error("Something went Wrong")
+    //   });
+    getAllJournalDetail()
+  }, []);
+
+  const getAllJournalDetail = () =>{
+    const endpoint = APIConstants.getAllJournals
+    console.log(endpoint)
+    axios.get(endpoint, 
+    {
       withCredentials:true
     })
       .then((res) => {
-        console.log(res);
-        setData(res.data);  // Store the journal data in state
+        console.log(res.data.responseBody.data);
+        toast.success("Successfully Fetched the Data")
+        setData(res.data.responseBody.data);  // Store the journal data in state
       })
       .catch((error) => {
         console.log(error);
+        toast.error("Something went Wrong")
       });
-  }, []);
+  }
 
   const handleCreateGoal = () => {
     setDrawerOpen(true);
@@ -55,7 +75,29 @@ export default function ListGoals() {
   const onSubmit = (formData) => {
     console.log("Form Data:", formData);
     // Add logic for submitting the journal
-    setDrawerOpen(false);  // Optionally close the drawer
+    const endpoint = APIConstants.createJournals
+    console.log(endpoint)
+    axios.post(endpoint,{
+      requestBody:{
+        journalName:formData.journalName,
+        isDisabled:false
+      }
+    },{
+      withCredentials:true
+    }).then((res) => {
+      if(res){
+        toast.success("Journal Added Successfully")
+        getAllJournalDetail()
+        setDrawerOpen(false)
+
+      }
+    }).catch((error) => {
+      toast.error("Something Went Wrong")
+      setDrawerOpen(false);  // Optionally close the drawer
+
+    }).finally(() =>{
+      setDrawerOpen(false);  // Optionally close the drawer
+    })
   };
 
   return (
@@ -74,11 +116,11 @@ export default function ListGoals() {
             {journalData.map((index) => (
               <Badge
                 key={index.id}
-                style={{ backgroundColor: index.color, color: 'black' }}
+                style={{ backgroundColor: index.color, color: 'white' }}
                 className="px-4 py-4 m-1"
                 onClick={() => handleListEvent(index.id)}
               >
-                {index.title}
+                {index.journalName}
               </Badge>
             ))}
           </CardContent>

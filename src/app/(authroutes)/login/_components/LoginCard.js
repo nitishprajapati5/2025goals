@@ -22,10 +22,11 @@ function LoginCard() {
     const onSubmit = (data) => {
         console.log('Console Data',data)
         showProgress()
-        const endpoint = APIConstants.API + "/" + APIConstants.AUTH
+        const endpoint = APIConstants.loginEndpoint
         axios.post(endpoint,{
-          endpoint:APIConstants.LOGINENDPOINT,
           requestBody:data
+        },{
+          withCredentials:true
         })
         .then((res) => {
           console.log(res)

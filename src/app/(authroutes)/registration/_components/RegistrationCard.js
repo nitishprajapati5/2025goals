@@ -10,6 +10,7 @@ import axios from 'axios'
 import * as APIConstants from '../../../_utils/ApiConstants'
 import { useProgress } from '@/app/_contexts/ProgressContext'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 function RegistrationCard() {
 
@@ -20,19 +21,21 @@ function RegistrationCard() {
     const onSubmit = (data) => {
       console.log(data)
       showProgress()
-      const route = APIConstants.API + "/" + APIConstants.AUTH
-      axios.post(route,{
-        endpoint:APIConstants.REGISTRATIONENDPOINT,
+      const endpoint = APIConstants.registrationEndpoint
+      axios.post(endpoint,{
         requestBody:data
+      },{
+        withCredentials:true
       }).then((res) => {
         router.push('/dashboard')
+        toast.success("Redirecting to Dashboard")
       }).catch((error) => {
          console.log(error)
+         toast.error("Something went Wrong!")
       }).finally(
         hideProgress()
       )
 
-      //hideProgress()
     }
 
 
