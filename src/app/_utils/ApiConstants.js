@@ -13,12 +13,13 @@ export const addLeafs = "addLeafs"
 export const getLeafsinJournals = "getLeafsinJournals"
 export const editleaf = "editleaf"
 export const deleteleaf = "deleteleaf"
+export const getBasedonId = "getLeafBasedonId"
 
 export const LOGINENDPOINT = "Login"
 export const REGISTRATIONENDPOINT = "Registration"
 export const ADDJOURNALENDPOINT = "AddJournal"
 export const GETJOURNALENDPOINT = "GetJournal" 
-
+export const shareUUIDBasedonJournal = "shareUUIDBasedonJournal"
 //Endpoint of Login and Registration
 export const loginEndpoint = process.env.NEXT_PUBLIC_API_BASE + API + LOGIN
 export const registrationEndpoint = process.env.NEXT_PUBLIC_API_BASE + API + REGISTRATION
@@ -35,3 +36,5 @@ export const AddJournalLeaf = process.env.NEXT_PUBLIC_API_BASE + API + addLeafs
 export const GetAllLeafsinJournal = process.env.NEXT_PUBLIC_API_BASE + API + getLeafsinJournals
 export const editJournalLeaf = process.env.NEXT_PUBLIC_API_BASE + API + editleaf
 export const deleteJournalLeaf = process.env.NEXT_PUBLIC_API_BASE + API + deleteleaf
+export const GetJournalLeafBasedonId = process.env.NEXT_PUBLIC_API_BASE + API + getBasedonId
+export const GetshareUUIDBasedonJournal = process.env.NEXT_PUBLIC_API_BASE + API + shareUUIDBasedonJournal

@@ -57,11 +57,11 @@ const journalData = [
   }
 ]
 
-function Activities({ selectedDate }) {
+function Activities( data ) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [filteredJournals, setFilteredJournals] = useState(null)
-
+  console.log("Data is",data)
   // Simulating data loading (e.g., async data fetch or calculation)
   // useEffect(() => {
   //   if (selectedDate) {
@@ -90,19 +90,19 @@ function Activities({ selectedDate }) {
     return <Loading /> // Show loading spinner if still loading
   }
 
-  if (!selectedDate) {
-    return (
-      <div className="w-full">
-        <Card className="w-full px-8 py-8 shadow-2xl">
-          <CardDescription className="flex justify-center items-center">
-            <h1 className='font-bold text-lg text-zinc-950'>            
-              Please select a Date
-            </h1>
-          </CardDescription>
-        </Card>
-      </div>
-    )
-  }
+  // if (!selectedDate) {
+  //   return (
+  //     <div className="w-full">
+  //       <Card className="w-full px-8 py-8 shadow-2xl">
+  //         <CardDescription className="flex justify-center items-center">
+  //           <h1 className='font-bold text-lg text-zinc-950'>            
+  //             Please select a Date
+  //           </h1>
+  //         </CardDescription>
+  //       </Card>
+  //     </div>
+  //   )
+  // }
 
   return (
     <div className="py-8 px-8 shadow-2xl shadow-green-600 w-full">

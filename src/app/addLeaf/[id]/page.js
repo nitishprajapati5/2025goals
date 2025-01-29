@@ -3,13 +3,20 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import React, { useState } from 'react'
-import TinyMCEEditor from '../dashboard/_components/Editor'
+import TinyMCEEditor from '../../dashboard/_components/Editor'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowRightCircleIcon } from 'lucide-react'
 import { useFormState } from 'react-hook-form'
+import axios from 'axios'
+import * as APIConstants from '../../_utils/ApiConstants'
+import moment from 'moment'
+import { useParams } from 'next/navigation'
+import { toast } from 'sonner'
+
 
 function page() {
+    const {id} = useParams()
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [editorData, setEditorData] = useState('')
@@ -50,15 +57,33 @@ function page() {
         setDescription(e.target.value)
     }
 
+
     const handleFormSubmit = () => {
         const data = new FormData()
         data.append('title',title)
-        data.append('date',date)
+        // const date = moment(date).toISOString()
+        data.append('date',moment(date).toISOString())
         data.append('description',description)
         data.append('editorData',editorData)
         data.append('file',file)
+        data.append('journalId',id)
+
 
         console.log(data)
+        const endpoint = APIConstants.AddJournalLeaf
+
+
+        console.log(endpoint)
+        axios.post(endpoint,
+            data
+        ,{withCredentials:true}).
+        then((res) => {
+            console.log(res)
+            toast.success("Added Successfully!")
+        }).catch((error) =>{
+            console.log(error)
+            toast.error("Something went Wrong!")
+        })
     }
 
     return (
@@ -69,7 +94,7 @@ function page() {
                         <h1 className='text-2xl font-extrabold flex flex-row'>Create Your Journal <ArrowRightCircleIcon className='m-1 animate-bounce' /></h1>
                         <Button onClick={handleFormSubmit}>Submit</Button>
                     </div>
-                    <form onSubmit={handleFormSubmit}>
+                    <form onSubmit={handleFormSubmit} >
                         <div className='flex flex-row justify-between'>
                         <div className='w-full px-4 py-4'>
                             <Label className="text-xl font-extrabold">Title to Your Journal</Label>
