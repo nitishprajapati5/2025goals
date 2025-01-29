@@ -23,6 +23,7 @@ function page() {
     const [file,setFile] = useState(null)
     const [date,setDateData] = useState('')
     const [filePreview,setFilePreview] = useState(null)
+    const {showProgress,hideProgress} = useProgress()
 
 
     const  handleFileChange = (event) => {
@@ -60,6 +61,7 @@ function page() {
 
     const handleFormSubmit = () => {
         const data = new FormData()
+        showProgress();
         data.append('title',title)
         // const date = moment(date).toISOString()
         data.append('date',moment(date).toISOString())
@@ -84,6 +86,7 @@ function page() {
             console.log(error)
             toast.error("Something went Wrong!")
         })
+        hideProgress();
     }
 
     return (

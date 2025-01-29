@@ -14,11 +14,13 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import * as APIConstants from '../../_utils/ApiConstants';
 import { toast } from 'sonner';
+import { useProgress } from '@/app/_contexts/ProgressContext'
 
 export default function ListGoals() {
   const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [journalData, setData] = useState([]);
+  const {showProgress,hideProgress} = useProgress()
 
   // Fetch journal data
   useEffect(() => {
@@ -37,7 +39,9 @@ export default function ListGoals() {
     //     console.log(error);
     //     toast.error("Something went Wrong")
     //   });
+    showProgress();
     getAllJournalDetail()
+    hideProgress();
   }, []);
 
   const getAllJournalDetail = () =>{

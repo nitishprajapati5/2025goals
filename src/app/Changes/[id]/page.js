@@ -13,6 +13,8 @@ import * as APIConstants from '../../_utils/ApiConstants'
 import moment from 'moment'
 import { useParams } from 'next/navigation'
 import { toast } from 'sonner'
+import { useProgress } from '@/app/_contexts/ProgressContext'
+
 
 function page() {
     const { id } = useParams()
@@ -22,6 +24,7 @@ function page() {
     const [file, setFile] = useState(null)
     const [date, setDateData] = useState('')
     const [filePreview, setFilePreview] = useState(null)
+    const {showProgress,hideProgress} = useProgress()
 
     // File handling
     const handleFileChange = (event) => {
@@ -39,7 +42,9 @@ function page() {
 
     // Fetch journal details based on ID
     useEffect(() => {
+        showProgress();
         getBasedonId()
+        hideProgress();
     }, []) // Empty array to run only once when component mounts
 
     const getBasedonId = () => {
@@ -84,7 +89,7 @@ function page() {
     // Form submit handler
     const handleFormSubmit = (e) => {
         e.preventDefault() // Prevent default form submission behavior
-
+        showProgress();
         const data = new FormData()
         data.append('title', title)
         data.append('date', moment(date).toISOString()) // Convert date to ISO format
@@ -108,6 +113,7 @@ function page() {
                 console.log(error)
                 toast.error("Something went Wrong")
             })
+            hideProgress();
     }
 
     return (

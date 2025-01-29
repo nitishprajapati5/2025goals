@@ -7,18 +7,18 @@ import * as APIConstants from '../../_utils/ApiConstants'
 import { toast } from 'sonner'
 import { useProgress } from '@/app/_contexts/ProgressContext'
 
-function JournalPage() {
-  const { id } = useParams()
-  console.log("Id is",id)
+function sharePage() {
+  const { uuid } = useParams()
+  console.log("Id is",uuid)
   const [data, setData] = useState({})
   const {showProgress,hideProgress} = useProgress()
 
   useEffect(() => {
     showProgress();
-    const endpoint = APIConstants.GetJournalLeafBasedonId
+    const endpoint = APIConstants.openShareUrl
     axios.post(endpoint, {
       requestBody: {
-        journalId: id
+        uuid: uuid
       }
     }, {
       withCredentials: true
@@ -68,4 +68,4 @@ function JournalPage() {
   )
 }
 
-export default JournalPage
+export default sharePage

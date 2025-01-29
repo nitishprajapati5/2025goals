@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-
+import { useProgress } from '@/app/_contexts/ProgressContext'
 
 function page() {
   const {id} = useParams()
@@ -30,7 +30,7 @@ function page() {
   const router = useRouter()
   const [dialogOpen,setDialogOpen] = useState(false)
   const [link,setLink] = useState('')
-
+  const {showProgress,hideProgress} = useProgress()
   const endpoint = APIConstants.GetAllLeafsinJournal
  
   useEffect(() =>{
@@ -47,7 +47,9 @@ function page() {
     // }).catch((error) =>{
     //   toast.error("Something went Wrong!")
     // })
+    showProgress();
     fetchDataForJournal(id)
+    hideProgress();
   },[])
 
 
@@ -87,6 +89,7 @@ function page() {
 
   const handleDeleteView = (journalId) =>{
     console.log(id)
+    showProgress();
     const endpoint = APIConstants.deleteJournalLeaf
     console.log(endpoint)
     axios.post(endpoint,{
@@ -96,12 +99,15 @@ function page() {
     },{withCredentials:true}).then((res) =>{
       toast.success("Successfully Delete Your Leaf!")
       fetchDataForJournal(id)
+      
     }).catch((error) =>{
       toast.error("Something went wrong")
     })
+    hideProgress();
   }
 
   const handleJournalShare = (id) =>{
+    showProgress();
     const endpoint = APIConstants.GetshareUUIDBasedonJournal
     axios.post(endpoint,{
       requestBody:{
@@ -119,14 +125,26 @@ function page() {
 
     }).catch((error) =>{
       console.log(error)
+      toast.error("Something Went Wrong!")
     })
-
-    // setDialogOpen(true)
+    hideProgress();
   }
 
   const handleViewJournal = (journalId) =>{
     console.log(journalId)
     router.push(`/view/${journalId}`)
+  }
+
+  const handleCopyShareLink = () =>{
+    console.log("Nitish is here")
+    navigator.clipboard.writeText(link).then(() => {
+      toast.success("Copied Successfully")
+      setDialogOpen(false)
+    }).catch((error) => {
+      console.log(error)
+      toast.error("Something went Wrong!")
+    })
+    // toast.success("Copied Successfully")
   }
   return (
     <>
@@ -225,13 +243,15 @@ function page() {
               Link
             </Label>
             <Input
-              id="link"
+              id="sharelink"
               defaultValue={link}
               readOnly
+              
             />
           </div>
-          <Button type="submit" size="sm" className="px-3">
+          <Button type="submit" size="sm" className="px-3" onClick={() =>handleCopyShareLink()}>
             <span className="sr-only">Copy</span>
+            {/* <Copy onClick={() => handleCopyShareLink()} /> */}
             <Copy />
           </Button>
         </div>

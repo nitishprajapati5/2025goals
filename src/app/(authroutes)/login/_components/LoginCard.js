@@ -21,7 +21,7 @@ function LoginCard() {
 
     const onSubmit = (data) => {
         console.log('Console Data',data)
-        showProgress()
+        showProgress();
         const endpoint = APIConstants.loginEndpoint
         axios.post(endpoint,{
           requestBody:data

@@ -7,9 +7,9 @@ const SketelonContext = createContext()
 export const SketelonProvider = ({children}) => {
     const [isSkeletonVisible,setIsSkeletonVisible] = useState(false)
 
-    const showSkeleton = () => setIsSkeletonVisible(true)
+    const showSkeleton = () => setIsSkeletonVisible(false)
 
-    const hideSkeleton = () => setIsSkeletonVisible(false)
+    const hideSkeleton = () => setIsSkeletonVisible(true)
 
     return (
         <SketelonContext.Provider value={{isSkeletonVisible,showSkeleton,hideSkeleton}}>

@@ -9,6 +9,9 @@ import Calendar from './_components/Calendar'
 import { useSearchParams } from 'next/navigation'
 import { Loading } from '../_components/ComponentLoading'
 import { PageLoading } from '../_components/PageLoading'
+import { useSkeleton } from '@/app/_contexts/SkeletonContext'
+import { useProgress } from '../_contexts/ProgressContext'
+import ProgressBar from '../_components/ProgressBar'
 
 const mark = [
   {
@@ -72,11 +75,18 @@ const mark = [
 function page() {
   const [loading,setLoading] = useState(true)
 
+  const {showProgress,hideProgress} = useProgress()
   // if(loading){
   //   return <PageLoading />
   // }
+
+  if(loading){
+    showProgress();
+  }
+
   return (
     <div className='container min-h-screen w-full'>
+      <ProgressBar />
       <Subscribe />
       <Navbar />
       <div className='m-3 grid sm:grid-cols-1 lg:grid-cols-2'>
