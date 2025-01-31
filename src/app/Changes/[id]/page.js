@@ -42,14 +42,13 @@ function page() {
 
     // Fetch journal details based on ID
     useEffect(() => {
-        showProgress();
         getBasedonId()
-        hideProgress();
     }, []) // Empty array to run only once when component mounts
 
-    const getBasedonId = () => {
+    const getBasedonId = async() => {
+        showProgress()
         const endpoint = APIConstants.GetJournalLeafBasedonId
-        axios
+        await axios
             .post(endpoint, {
                 requestBody: {
                     journalId: parseInt(id)
@@ -65,6 +64,8 @@ function page() {
             })
             .catch((error) => {
                 console.log(error)
+            }).finally(() =>{
+                hideProgress()
             })
     }
 

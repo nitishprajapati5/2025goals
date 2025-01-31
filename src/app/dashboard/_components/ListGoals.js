@@ -23,7 +23,7 @@ export default function ListGoals() {
   const {showProgress,hideProgress} = useProgress()
 
   // Fetch journal data
-  useEffect(() => {
+  useEffect(async() => {
     // const endpoint = APIConstants.getAllJournals
     // console.log(endpoint)
     // axios.get(endpoint, 
@@ -39,15 +39,15 @@ export default function ListGoals() {
     //     console.log(error);
     //     toast.error("Something went Wrong")
     //   });
-    showProgress();
     getAllJournalDetail()
-    hideProgress();
   }, []);
 
-  const getAllJournalDetail = () =>{
+  const getAllJournalDetail = async() =>{
     const endpoint = APIConstants.getAllJournals
     console.log(endpoint)
-    axios.get(endpoint, 
+    showProgress();
+
+    await axios.get(endpoint,
     {
       withCredentials:true
     })
@@ -59,6 +59,9 @@ export default function ListGoals() {
       .catch((error) => {
         console.log(error);
         toast.error("Something went Wrong")
+      }).finally(() =>{
+        hideProgress();
+
       });
   }
 
@@ -76,12 +79,13 @@ export default function ListGoals() {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const onSubmit = (formData) => {
+  const onSubmit = async(formData) => {
     console.log("Form Data:", formData);
     // Add logic for submitting the journal
     const endpoint = APIConstants.createJournals
+    showProgress()
     console.log(endpoint)
-    axios.post(endpoint,{
+    await axios.post(endpoint,{
       requestBody:{
         journalName:formData.journalName,
         isDisabled:false
@@ -100,7 +104,8 @@ export default function ListGoals() {
       setDrawerOpen(false);  // Optionally close the drawer
 
     }).finally(() =>{
-      setDrawerOpen(false);  // Optionally close the drawer
+      setDrawerOpen(false);
+      hideProgress() // Optionally close the drawer
     })
   };
 

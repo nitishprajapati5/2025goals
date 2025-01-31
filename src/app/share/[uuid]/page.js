@@ -13,10 +13,10 @@ function sharePage() {
   const [data, setData] = useState({})
   const {showProgress,hideProgress} = useProgress()
 
-  useEffect(() => {
+  useEffect(async() => {
     showProgress();
     const endpoint = APIConstants.openShareUrl
-    axios.post(endpoint, {
+    await axios.post(endpoint, {
       requestBody: {
         uuid: uuid
       }
@@ -29,8 +29,10 @@ function sharePage() {
     }).catch((error) => {
       console.log(error)
       toast.error("Something went Wrong!")
+    }).finally(() =>{
+      hideProgress();
+
     })
-    hideProgress();
   }, [])
 
   return (

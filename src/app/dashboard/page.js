@@ -72,17 +72,30 @@ const mark = [
   }
 ]
 
-function page() {
-  const [loading,setLoading] = useState(true)
-
-  const {showProgress,hideProgress} = useProgress()
-  // if(loading){
-  //   return <PageLoading />
-  // }
-
-  if(loading){
-    showProgress();
+var getCookies = function(){
+  var pairs = document.cookie.split(";");
+  var cookies = {};
+  for (var i=0; i<pairs.length; i++){
+    var pair = pairs[i].split("=");
+    cookies[(pair[0]+'').trim()] = unescape(pair.slice(1).join('='));
   }
+  return cookies;
+}
+
+function page() {
+
+  const token = getCookies()
+  console.log("Token is",token)
+    // const [loading,setLoading] = useState(true)
+
+  // const {showProgress,hideProgress} = useProgress()
+  // // if(loading){
+  // //   return <PageLoading />
+  // // }
+
+  // if(loading){
+  //   showProgress();
+  // }
 
   return (
     <div className='container min-h-screen w-full'>

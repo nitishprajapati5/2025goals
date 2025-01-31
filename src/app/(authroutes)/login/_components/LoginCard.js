@@ -19,11 +19,11 @@ function LoginCard() {
 
     const {register,handleSubmit,formState:{errors}} = useForm()
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         console.log('Console Data',data)
         showProgress();
         const endpoint = APIConstants.loginEndpoint
-        axios.post(endpoint,{
+        await axios.post(endpoint,{
           requestBody:data
         },{
           withCredentials:true
@@ -35,8 +35,9 @@ function LoginCard() {
           console.log(error)
           toast.error("Something went Wrong!")
         })
-        .finally(
+        .finally(() =>{
           hideProgress()
+        }
         )
        
     }

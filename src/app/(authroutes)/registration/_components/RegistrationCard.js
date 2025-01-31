@@ -18,11 +18,11 @@ function RegistrationCard() {
     const {register,handleSubmit,formState:{errors}} = useForm()
     const router = useRouter();
 
-    const onSubmit = (data) => {
+    const onSubmit = async(data) => {
       console.log(data)
       showProgress()
       const endpoint = APIConstants.registrationEndpoint
-      axios.post(endpoint,{
+      await axios.post(endpoint,{
         requestBody:data
       },{
         withCredentials:true
@@ -32,8 +32,9 @@ function RegistrationCard() {
       }).catch((error) => {
          console.log(error)
          toast.error("Something went Wrong!")
-      }).finally(
+      }).finally(() =>{
         hideProgress()
+      }
       )
 
     }

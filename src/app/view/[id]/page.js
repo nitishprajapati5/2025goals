@@ -13,10 +13,10 @@ function JournalPage() {
   const [data, setData] = useState({})
   const {showProgress,hideProgress} = useProgress()
 
-  useEffect(() => {
+  useEffect(async () => {
     showProgress();
     const endpoint = APIConstants.GetJournalLeafBasedonId
-    axios.post(endpoint, {
+    await axios.post(endpoint, {
       requestBody: {
         journalId: id
       }
@@ -29,8 +29,9 @@ function JournalPage() {
     }).catch((error) => {
       console.log(error)
       toast.error("Something went Wrong!")
+    }).finally(() =>{
+      hideProgress();
     })
-    hideProgress();
   }, [])
 
   return (
@@ -38,9 +39,10 @@ function JournalPage() {
       {data && (
         <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-xl p-6">
           {/* Journal Image */}
-          <div className="w-full h-500px mb-8">
+          <div className="w-full h-400px mb-8">
             <img 
-              className="w-full h-full object-cover rounded-lg" 
+              className="w-full h-full object-cover rounded-lg"
+              height={'500px'}
               src={"data:" + data.imageType + ";base64," + data.journalImage} 
               alt="Journal Image"
             />

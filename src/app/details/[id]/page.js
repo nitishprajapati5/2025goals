@@ -33,41 +33,34 @@ function page() {
   const {showProgress,hideProgress} = useProgress()
   const endpoint = APIConstants.GetAllLeafsinJournal
  
-  useEffect(() =>{
-    // axios.post(endpoint,{
-    //   requestBody:{
-    //     journalId:parseInt(id)
-    //   }
-    // },{
-    //   withCredentials:true
-    // }).then((res) =>{
-    //   console.log(res)
-    //   toast.success("Data Fetched Successfully!")
-    //   setData(res.data.responseBody.data)
-    // }).catch((error) =>{
-    //   toast.error("Something went Wrong!")
-    // })
+
+useEffect(() => {
+  fetchDataForJournal(id);
+}, []);
+
+const fetchDataForJournal = async (id) => {
+  try {
+    // Show progress before starting the API call
     showProgress();
-    fetchDataForJournal(id)
-    hideProgress();
-  },[])
-
-
-  const fetchDataForJournal = (id) =>{
-    axios.post(endpoint,{
-      requestBody:{
-        journalId:parseInt(id)
+    // Make the API call
+    const res = await axios.post(endpoint, {
+      requestBody: {
+        journalId: parseInt(id),
       }
-    },{
-      withCredentials:true
-    }).then((res) =>{
-      console.log(res)
-      toast.success("Data Fetched Successfully!")
-      setData(res.data.responseBody.data)
-    }).catch((error) =>{
-      toast.error("Something went Wrong!")
-    })
-  } 
+    }, {
+      withCredentials: true
+    });
+    console.log(res);
+    toast.success("Data Fetched Successfully!");
+    setData(res.data.responseBody.data);
+  } catch (error) {
+    toast.error("Something went wrong!");
+  } finally {
+    // Hide progress after the API call is done
+    hideProgress();
+  }
+};
+
 
 
 
@@ -87,48 +80,51 @@ function page() {
     router.push(`/addLeaf/${id}`)
   }
 
-  const handleDeleteView = (journalId) =>{
-    console.log(id)
+  const handleDeleteView = (journalId) => {
+    console.log(journalId); // Ensure this logs the correct value
     showProgress();
-    const endpoint = APIConstants.deleteJournalLeaf
-    console.log(endpoint)
-    axios.post(endpoint,{
-      requestBody:{
-        journalId:journalId
-      }
-    },{withCredentials:true}).then((res) =>{
-      toast.success("Successfully Delete Your Leaf!")
-      fetchDataForJournal(id)
-      
-    }).catch((error) =>{
-      toast.error("Something went wrong")
-    })
-    hideProgress();
-  }
+    const endpoint = APIConstants.deleteJournalLeaf;
+    console.log(endpoint);
 
-  const handleJournalShare = (id) =>{
-    showProgress();
-    const endpoint = APIConstants.GetshareUUIDBasedonJournal
-    axios.post(endpoint,{
-      requestBody:{
-        id:id
-      }
-    },{
-      withCredentials:true
-    }).then((res) => {
-      //alert(res.data.responseBody.data.uuid) 
-      // alert(window.location.origin)
-      const sharePoint = window.location.origin + "/share/" + res.data.responseBody.data.uuid 
-      setLink(sharePoint)
-      // setLink(res.data.responseBody.uuid)
-      setDialogOpen(true)
-
-    }).catch((error) =>{
-      console.log(error)
-      toast.error("Something Went Wrong!")
+    axios.post(endpoint, {
+        requestBody: {
+            journalId: journalId
+        }
+    }, { withCredentials: true })
+    .then((res) => {
+        toast.success("Successfully Deleted Your Leaf!");
+        fetchDataForJournal(journalId); // Make sure this function exists
     })
-    hideProgress();
-  }
+    .catch((error) => {
+        toast.error("Something went wrong");
+    })
+    .finally(() => {  // Ensure this is inside an arrow function
+        hideProgress();
+    });
+};
+
+
+const handleJournalShare = (id) => {
+  showProgress();
+  const endpoint = APIConstants.GetshareUUIDBasedonJournal;
+
+  axios.post(endpoint, {
+      requestBody: { id: id }
+  }, { withCredentials: true })
+  .then((res) => {
+      const sharePoint = window.location.origin + "/share/" + res.data.responseBody.data.uuid;
+      setLink(sharePoint);
+      setDialogOpen(true);
+  })
+  .catch((error) => {
+      console.log(error);
+      toast.error("Something Went Wrong!");
+  })
+  .finally(() => {
+      hideProgress();  // Ensure this runs after everything
+  });
+};
+
 
   const handleViewJournal = (journalId) =>{
     console.log(journalId)
