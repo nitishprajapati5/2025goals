@@ -86,9 +86,9 @@ function Activities( data ) {
     router.push("/addLeaf")
   }
 
-  if (loading) {
-    return <Loading /> // Show loading spinner if still loading
-  }
+  // if (loading) {
+  //   return <Loading /> // Show loading spinner if still loading
+  // }
 
   // if (!selectedDate) {
   //   return (
