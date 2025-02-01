@@ -59,7 +59,7 @@ function page() {
     }
 
 
-    const handleFormSubmit = () => {
+    const handleFormSubmit = async() => {
         const data = new FormData()
         showProgress();
         data.append('title',title)
@@ -76,7 +76,7 @@ function page() {
 
 
         console.log(endpoint)
-        axios.post(endpoint,
+        await axios.post(endpoint,
             data
         ,{withCredentials:true}).
         then((res) => {
@@ -85,8 +85,9 @@ function page() {
         }).catch((error) =>{
             console.log(error)
             toast.error("Something went Wrong!")
+        }).finally(() =>{
+            hideProgress();
         })
-        hideProgress();
     }
 
     return (
