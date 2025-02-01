@@ -1,31 +1,32 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import * as APIConstants from "../../_utils/ApiConstants";
 import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Activity, Copy, Edit, Eye, Leaf, Share, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle,DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useProgress } from "@/app/_contexts/ProgressContext";
 
 function Page() {
-  const params = useParams();
-  const id = params?.id;
+  const { id } = useParams();
   const router = useRouter();
   const { showProgress, hideProgress } = useProgress();
 
   const [data, setData] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [link, setLink] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Prevents duplicate API calls
 
   // Fetch Journal Data
-  const fetchDataForJournal = useCallback(async () => {
-    if (!id) return;
+  const fetchDataForJournal = async () => {
+    if (!id || isLoading) return; // Prevent unnecessary calls
+    setIsLoading(true);
     showProgress();
 
     try {
@@ -42,12 +43,13 @@ function Page() {
       toast.error("Something went wrong!");
     } finally {
       hideProgress();
+      setIsLoading(false);
     }
-  }, [id, showProgress, hideProgress]);
+  };
 
   useEffect(() => {
     fetchDataForJournal();
-  }, [fetchDataForJournal]);
+  }, [id]); // Only runs when 'id' changes
 
   // Delete Journal Entry
   const handleDeleteView = async (journalId) => {
@@ -59,7 +61,7 @@ function Page() {
       await axios.post(endpoint, { requestBody: { journalId } }, { withCredentials: true });
 
       toast.success("Successfully Deleted Your Leaf!");
-      fetchDataForJournal();
+      fetchDataForJournal(); // Refresh data after delete
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
