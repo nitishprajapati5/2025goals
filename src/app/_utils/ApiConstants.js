@@ -21,7 +21,8 @@ export const ADDJOURNALENDPOINT = "AddJournal"
 export const GETJOURNALENDPOINT = "GetJournal" 
 export const shareUUIDBasedonJournal = "shareUUIDBasedonJournal"
 export const share = "share"
-
+export const dashboard = "dashboard"
+export const logout = "logout"
 //Endpoint of Login and Registration
 export const loginEndpoint = process.env.NEXT_PUBLIC_API_BASE + API + LOGIN
 export const registrationEndpoint = process.env.NEXT_PUBLIC_API_BASE + API + REGISTRATION
@@ -41,3 +42,5 @@ export const deleteJournalLeaf = process.env.NEXT_PUBLIC_API_BASE + API + delete
 export const GetJournalLeafBasedonId = process.env.NEXT_PUBLIC_API_BASE + API + getBasedonId
 export const GetshareUUIDBasedonJournal = process.env.NEXT_PUBLIC_API_BASE + API + shareUUIDBasedonJournal
 export const openShareUrl = process.env.NEXT_PUBLIC_API_BASE + API + share
+export const getDashboardEndpoint = process.env.NEXT_PUBLIC_API_BASE + API + dashboard
+export const getLogoutRequest = process.env.NEXT_PUBLIC_API_BASE + API + logout

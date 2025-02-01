@@ -100,7 +100,7 @@ function page() {
   return (
     <div className='container min-h-screen w-full'>
       <ProgressBar />
-      <Subscribe />
+      {/* <Subscribe /> */}
       <Navbar />
       <div className='m-3 grid sm:grid-cols-1 lg:grid-cols-2'>
         <div>
