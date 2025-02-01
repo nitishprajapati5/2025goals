@@ -23,6 +23,11 @@ function LoginCard() {
         console.log('Console Data',data)
         showProgress();
         const endpoint = APIConstants.loginEndpoint
+
+
+        console.log(endpoint)
+
+
         await axios.post(endpoint,{
           requestBody:data
         },{
