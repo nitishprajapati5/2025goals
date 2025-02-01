@@ -2,8 +2,6 @@
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 // import Calendar from './_components/Calendar'
-import CustomCalendar from './_components/Calendar'
-import Activities from './_components/Activities'
 import axios from 'axios'
 import * as APIConstants from '../../_utils/ApiConstants'
 import { toast } from 'sonner'
@@ -24,7 +22,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useProgress } from '@/app/_contexts/ProgressContext'
 
-function page() {
+function Page() {
   const {id} = useParams()
   const [data,setData] = useState([])
   const router = useRouter()
@@ -34,9 +32,12 @@ function page() {
   const endpoint = APIConstants.GetAllLeafsinJournal
  
 
-useEffect(() => {
-  fetchDataForJournal(id);
-}, []);
+  useEffect(() => {
+    if (id) {
+      fetchDataForJournal(id);
+    }
+  }, [id]);  // <-- Add 'id' as a dependency
+  
 
 const fetchDataForJournal = async (id) => {
   try {
@@ -267,4 +268,4 @@ const handleJournalShare = (id) => {
   )
 }
 
-export default page
+export default Page
