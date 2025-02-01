@@ -84,8 +84,8 @@ var getCookies = function(){
 
 function page() {
 
-  const token = getCookies()
-  console.log("Token is",token)
+  // const token = getCookies()
+  // console.log("Token is",token)
     // const [loading,setLoading] = useState(true)
 
   // const {showProgress,hideProgress} = useProgress()
