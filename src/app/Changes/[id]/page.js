@@ -63,7 +63,7 @@ function page() {
                 setFilePreview("data:" + data.imageType + ";base64," + data.journalImage)
             })
             .catch((error) => {
-                console.log(error)
+                // console.log(error)
             }).finally(() =>{
                 hideProgress()
             })
@@ -102,16 +102,16 @@ function page() {
         data.append('id', id)
 
         const endpoint = APIConstants.editJournalLeaf
-        console.log(data)
-        console.log(endpoint)
+        // console.log(data)
+        // console.log(endpoint)
         axios
             .post(endpoint, data, { withCredentials: true })
             .then((res) => {
-                console.log(res)
+                // console.log(res)
                 toast.success("Updated Successfully!")
             })
             .catch((error) => {
-                console.log(error)
+                // console.log(error)
                 toast.error("Something went Wrong")
             })
             hideProgress();

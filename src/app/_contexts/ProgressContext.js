@@ -8,11 +8,11 @@ export const ProgressProvider = ({ children }) => {
   const [isProgressVisible, setIsProgressVisible] = useState(false);
 
   const showProgress = () => {
-    console.log("Inside the Show Progress")
+    // console.log("Inside the Show Progress")
     setIsProgressVisible(true);
   }
   const hideProgress = () => {
-    console.log("Inside Hide Progress Bar")
+    // console.log("Inside Hide Progress Bar")
     setIsProgressVisible(false);
   }
 

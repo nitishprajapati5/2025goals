@@ -7,13 +7,13 @@ export default function TinyMCEEditor({EditorData,onEditorChange}) {
   const [content, setContent] = useState('');
 
     const handleEditorChange = (content,editor) =>{
-        console.log(content)
+        // console.log(content)
         setContent(content)
         EditorData(content)
     }
 
     const handleActivities = () => {
-        console.log(content)
+        // console.log(content)
         EditorData(content)
     }
 

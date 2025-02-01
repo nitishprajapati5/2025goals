@@ -19,7 +19,7 @@ function RegistrationCard() {
     const router = useRouter();
 
     const onSubmit = async(data) => {
-      console.log(data)
+      // console.log(data)
       showProgress()
       const endpoint = APIConstants.registrationEndpoint
       await axios.post(endpoint,{
@@ -30,7 +30,8 @@ function RegistrationCard() {
         router.push('/dashboard')
         toast.success("Redirecting to Dashboard")
       }).catch((error) => {
-         console.log(error)
+        //  console.log(error)
+        // router.push('/login')
          toast.error("Something went Wrong!")
       }).finally(() =>{
         hideProgress()

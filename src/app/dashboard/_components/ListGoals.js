@@ -33,7 +33,7 @@ export default function ListGoals() {
 
   const getAllJournalDetail = async() =>{
     const endpoint = APIConstants.getAllJournals
-    console.log(endpoint)
+    // console.log(endpoint)
     showProgress();
 
     await axios.get(endpoint,
@@ -41,13 +41,15 @@ export default function ListGoals() {
       withCredentials:true
     })
       .then((res) => {
-        console.log(res.data.responseBody.data);
+        // console.log(res.data.responseBody.data);
+        console.log(res.status)
         toast.success("Successfully Fetched the Data")
         setData(res.data.responseBody.data);  // Store the journal data in state
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Something went Wrong")
+        router.push('/login')
+        toast.error("Something went Wrong!Please login Again")
       }).finally(() =>{
         hideProgress();
 
@@ -69,11 +71,11 @@ export default function ListGoals() {
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = async(formData) => {
-    console.log("Form Data:", formData);
+    // console.log("Form Data:", formData);
     // Add logic for submitting the journal
     const endpoint = APIConstants.createJournals
     showProgress()
-    console.log(endpoint)
+    // console.log(endpoint)
     await axios.post(endpoint,{
       requestBody:{
         journalName:formData.journalName,
@@ -82,6 +84,7 @@ export default function ListGoals() {
     },{
       withCredentials:true
     }).then((res) => {
+      console.log(res)
       if(res){
         toast.success("Journal Added Successfully")
         getAllJournalDetail()

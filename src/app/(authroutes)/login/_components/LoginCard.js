@@ -20,12 +20,12 @@ function LoginCard() {
     const {register,handleSubmit,formState:{errors}} = useForm()
 
     const onSubmit = async (data) => {
-        console.log('Console Data',data)
+        // console.log('Console Data',data)
         showProgress();
         const endpoint = APIConstants.loginEndpoint
 
 
-        console.log(endpoint)
+        // console.log(endpoint)
 
 
         await axios.post(endpoint,{
@@ -34,10 +34,11 @@ function LoginCard() {
           withCredentials:true
         })
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           router.push("/dashboard")
         }).catch((error) => {
-          console.log(error)
+          // console.log(error)
+          // router.push('/login')
           toast.error("Something went Wrong!")
         })
         .finally(() =>{

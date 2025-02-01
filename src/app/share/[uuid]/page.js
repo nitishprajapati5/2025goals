@@ -9,7 +9,7 @@ import { useProgress } from '@/app/_contexts/ProgressContext'
 
 function sharePage() {
   const { uuid } = useParams()
-  console.log("Id is",uuid)
+  // console.log("Id is",uuid)
   const [data, setData] = useState({})
   const {showProgress,hideProgress} = useProgress()
 
@@ -23,11 +23,12 @@ function sharePage() {
     }, {
       withCredentials: true
     }).then((res) => {
-      console.log(res.data.responseBody.data)
+      // console.log(res.data.responseBody.data)
       setData(res.data.responseBody.data)
       toast.success("Successfully")
     }).catch((error) => {
-      console.log(error)
+      // console.log(error)
+      router.push('/login')
       toast.error("Something went Wrong!")
     }).finally(() =>{
       hideProgress();

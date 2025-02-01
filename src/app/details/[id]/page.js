@@ -36,11 +36,12 @@ function Page() {
         { requestBody: { journalId: parseInt(id) } },
         { withCredentials: true }
       );
-
+      console.log(res)
       setData(res.data.responseBody.data);
       toast.success("Data Fetched Successfully!");
     } catch (error) {
-      toast.error("Something went wrong!");
+      router.push('/login')
+      toast.error("Something went wrong!Please Login again");
     } finally {
       hideProgress();
       setIsLoading(false);
@@ -63,6 +64,7 @@ function Page() {
       toast.success("Successfully Deleted Your Leaf!");
       fetchDataForJournal(); // Refresh data after delete
     } catch (error) {
+      router.push('/login')
       toast.error("Something went wrong");
     } finally {
       hideProgress();
@@ -80,6 +82,7 @@ function Page() {
       setLink(`${window.location.origin}/share/${res.data.responseBody.data.uuid}`);
       setDialogOpen(true);
     } catch (error) {
+      // router.push('/login')
       toast.error("Something went wrong!");
     } finally {
       hideProgress();

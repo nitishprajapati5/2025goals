@@ -11,12 +11,13 @@ import { useFormState } from 'react-hook-form'
 import axios from 'axios'
 import * as APIConstants from '../../_utils/ApiConstants'
 import moment from 'moment'
-import { useParams } from 'next/navigation'
+import { useParams,useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { useProgress } from '@/app/_contexts/ProgressContext'
 
 function page() {
     const {id} = useParams()
+    const router = useRouter()
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [editorData, setEditorData] = useState('')
@@ -71,20 +72,22 @@ function page() {
         data.append('journalId',id)
 
 
-        console.log(data)
+        // console.log(data)
         const endpoint = APIConstants.AddJournalLeaf
 
 
-        console.log(endpoint)
+        // console.log(endpoint)
         await axios.post(endpoint,
             data
         ,{withCredentials:true}).
         then((res) => {
-            console.log(res)
+            // console.log(res)
             toast.success("Added Successfully!")
+            router.push('/dashboard')
         }).catch((error) =>{
-            console.log(error)
-            toast.error("Something went Wrong!")
+            // console.log(error)
+            router.push('/login')
+            toast.error("Something went Wrong!Please Login again")
         }).finally(() =>{
             hideProgress();
         })
