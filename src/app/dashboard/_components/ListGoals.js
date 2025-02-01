@@ -23,24 +23,13 @@ export default function ListGoals() {
   const {showProgress,hideProgress} = useProgress()
 
   // Fetch journal data
-  useEffect(async() => {
-    // const endpoint = APIConstants.getAllJournals
-    // console.log(endpoint)
-    // axios.get(endpoint, 
-    // {
-    //   withCredentials:true
-    // })
-    //   .then((res) => {
-    //     console.log(res.data.responseBody.data);
-    //     toast.success("Successfully Fetched the Data")
-    //     setData(res.data.responseBody.data);  // Store the journal data in state
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     toast.error("Something went Wrong")
-    //   });
-    getAllJournalDetail()
+  useEffect(() => {
+    const fetchData = async () => {
+      await getAllJournalDetail();
+    };
+    fetchData();
   }, []);
+  
 
   const getAllJournalDetail = async() =>{
     const endpoint = APIConstants.getAllJournals
