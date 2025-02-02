@@ -9,6 +9,7 @@ import { useProgress } from '@/app/_contexts/ProgressContext'
 
 function sharePage() {
   const { uuid } = useParams()
+  const router = useRouter()
   // console.log("Id is",uuid)
   const [data, setData] = useState({})
   const {showProgress,hideProgress} = useProgress()
