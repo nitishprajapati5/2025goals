@@ -7,45 +7,55 @@ import * as APIConstants from '../../_utils/ApiConstants'
 import { toast } from 'sonner'
 import { useProgress } from '@/app/_contexts/ProgressContext'
 
-function sharePage() {
+function SharePage() {
   const { uuid } = useParams()
   const router = useRouter()
-  // console.log("Id is",uuid)
-  const [data, setData] = useState({})
-  const {showProgress,hideProgress} = useProgress()
+  const [data, setData] = useState(null) // Initial state as null to represent loading state
+  const { showProgress, hideProgress } = useProgress()
 
-  useEffect(async() => {
-    showProgress();
-    const endpoint = APIConstants.openShareUrl
-    await axios.post(endpoint, {
-      requestBody: {
-        uuid: uuid
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        showProgress()
+        const response = await axios.post(APIConstants.openShareUrl, {
+          requestBody: { uuid }
+        }, { withCredentials: true })
+
+        setData(response.data.responseBody.data)
+        toast.success("Successfully loaded the journal.")
+      } catch (error) {
+        toast.error("Something went wrong!")
+        router.push('/login')
+      } finally {
+        hideProgress()
       }
-    }, {
-      withCredentials: true
-    }).then((res) => {
-      // console.log(res.data.responseBody.data)
-      setData(res.data.responseBody.data)
-      toast.success("Successfully")
-    }).catch((error) => {
-      // console.log(error)
-      router.push('/login')
-      toast.error("Something went Wrong!")
-    }).finally(() =>{
-      hideProgress();
+    }
 
-    })
-  }, [])
+    if (uuid) {
+      fetchData()
+    }
+  }, [uuid, showProgress, hideProgress, router])
+
+  if (data === null) {
+    // Loading state
+    return (
+      <div className="container min-h-screen p-8">
+        <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-xl p-6">
+          <p>Loading...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="container min-h-screen p-8">
       {data && (
         <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-xl p-6">
           {/* Journal Image */}
-          <div className="w-full h-500px mb-8">
+          <div className="w-full h-[500px] mb-8">
             <img 
               className="w-full h-full object-cover rounded-lg" 
-              src={"data:" + data.imageType + ";base64," + data.journalImage} 
+              src={`data:${data.imageType};base64,${data.journalImage}`} 
               alt="Journal Image"
             />
           </div>
@@ -72,4 +82,4 @@ function sharePage() {
   )
 }
 
-export default sharePage
+export default SharePage
