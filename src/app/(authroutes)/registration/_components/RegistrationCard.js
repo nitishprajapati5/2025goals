@@ -79,11 +79,7 @@ function RegistrationCard() {
                     type="email" 
                     placeholder="Enter your Email" 
                     {...register("email",
-                      {required:"Email is required",
-                        pattern:{
-                          value: /\S+@\S+\.\S+/,
-                          message:"Email is invalid"
-                        }
+                      {required:"Email is required"
                       }
                       )}
                     />
