@@ -34,7 +34,7 @@ function SharePage() {
     if (uuid) {
       fetchData()
     }
-  }, [uuid, showProgress, hideProgress, router])
+  }, [uuid])
 
   if (data === null) {
     // Loading state
